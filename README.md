@@ -26,29 +26,30 @@
   
 ## VM arguments:				       
  
-  * 1st [domain ontology path][string]
+  * 1st: domain ontology path [string]
 	* _e.g.: C:/Users/.../ontology.owl_
 
-  * 2nd [.rdf alignment path] (to be generated)[string]
+  * 2nd: .rdf alignment path (to be generated) [string]
 	* _e.g.: C:/Users/.../alignment.rdf_
 
-  * 3rd [top ontology] (dolce or sumo)[string]
+  * 3rd: top ontology (dolce or sumo) [string]
 	* _e.g.: dolce_
 
-  * 4th [alignment technique] (1 or 2)[integer]
+  * 4th: alignment technique (1 or 2) [integer]
 	* _e.g.: 2_
         
-	* Observation
+	* **Important**
 		* 1:  Context technique(LESK)
 		* 2:  Word embedding technique
-  ###### Observation: If selected, the 2nd technique must use the notation _2:model_, where model = 'google' or 'glove'
 
-  * 5th [context selecting] (0 or 1)[integer]
+       ###### Observation: If selected, the 2nd technique must use the notation _2:model_, where model = 'google' or 'glove'
+
+  * 5th: context selecting (0 or 1) [integer]
 	* _e.g.: 0_
 
-	* Observation
+	* **Important**
 		* 0:  Concept context for disambiguation (only)
 		* 1:  Concept context + domain onyology context for disambiguation
 
-  * 6th [reference alignment path](optional)[string]
+  * 6th: reference alignment path (optional) [string]
   	* _e.g.: C:/Users/.../referenceAlign.rdf_
