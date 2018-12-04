@@ -41,7 +41,7 @@
 	* Observation
 		* 1:  Context technique(LESK)
 		* 2:  Word embedding technique
-###### Observation: If selected, the 2nd technique must use the notation _2:model_, where model = 'google' or 'glove'
+  ###### Observation: If selected, the 2nd technique must use the notation _2:model_, where model = 'google' or 'glove'
 
   * 5th [context selecting] (0 or 1)[integer]
 	* _e.g.: 0_
