@@ -24,36 +24,31 @@
   
   ###### Observation: The memory usage depends on the size of the ontologies used.
   
-## VM arguments:
+## VM arguments:				       
+ 
+  * 1st [domain ontology path][string]
+ 	e.g.: C:/Users/.../ontology.owl
 
-    * 1st [domain ontology path][string]								             
-	e.g.: C:/Users/.../ontology.owl	
-      
-    * 2nd [.rdf alignment path] (to be generated)[string]			        
-	e.g.: C:/Users/.../alignment.rdf		
-      
-    * 3rd [top ontology] (dolce or sumo)[string]				        
-	e.g.: dolce								
-      
-    * 4th [alignment technique] (1 or 2)[integer]				        
-    	e.g.: 2								
+  * 2nd [.rdf alignment path] (to be generated)[string]
+	e.g.: C:/Users/.../alignment.rdf
+
+  * 3rd [top ontology] (dolce or sumo)[string]
+	e.g.: dolce
+
+  * 4th [alignment technique] (1 or 2)[integer]
+    	e.g.: 2
         
-        *Observation
-        	*1:  Context technique(LESK)
-        	*2:  Word embedding technique
+	* Observation
+        	* 1:  Context technique(LESK)
+        	* 2:  Word embedding technique
             		(if selected, use -> 2:model, where model = 'google' or 'glove')
-    
-    * 5th [context selecting] (0 or 1)[integer]
-    	e.g.: 0
-        
-        *Observation
+
+  * 5th [context selecting] (0 or 1)[integer]
+	e.g.: 0
+
+	* Observation
 		* 0:  Concept context for disambiguation (only)
-        	* 1:  Concept context + domain onyology context for disambiguation 
-     
-    *6th [reference alignment path](optional)[string]				       
-	e.g.: C:/Users/.../referenceAlign.rdf				       
-  
-  
+		* 1:  Concept context + domain onyology context for disambiguation
 
-
-
+  * 6th [reference alignment path](optional)[string]
+  	e.g.: C:/Users/.../referenceAlign.rdf
