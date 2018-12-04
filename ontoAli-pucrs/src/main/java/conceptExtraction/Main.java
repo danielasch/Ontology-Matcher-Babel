@@ -184,7 +184,7 @@ public class Main {
 	 */
 
 	private static void disamb(List<Concept> listDom) {
-		BaseResource base = new BaseResource(1, null);
+		BaseResource base = new BaseResource();
 		ContextProcessing proc = new ContextProcessing(base);
 		proc.process(listDom);
 		SynsetDisambiguation disam = new SynsetDisambiguation(base);
@@ -229,7 +229,7 @@ public class Main {
 	*/
 
 	private static void disambWE(List<Concept> listDom, String model) {
-		BaseResource base = new BaseResource(2, model);
+		BaseResource base = new BaseResource(model);
 		ContextProcessing proc = new ContextProcessing(base);
 		proc.process(listDom);
 		SynsetDisambiguationWE disam = new SynsetDisambiguationWE(base);
@@ -237,7 +237,7 @@ public class Main {
 	}
 
 	private static void matchWE(Ontology domain, Ontology upper, String outPath, List<Concept> listDom, List<Concept> listUp, String model) {
-		BaseResource base = new BaseResource(2, model);
+		BaseResource base = new BaseResource(model);
 		ContextProcessing proc = new ContextProcessing(base);
 		proc.procWE(listDom);
 		proc.procWE(listUp);
