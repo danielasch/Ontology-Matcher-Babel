@@ -36,13 +36,13 @@
 	* _e.g.: dolce_
 
   * 4th: alignment technique (1 or 2) [integer]
-	* _e.g.: 2_
+	* _e.g.: 1_
         
 	* **Important**
 		* 1:  Context technique(LESK)
 		* 2:  Word embedding technique
 
-       ###### Observation: If selected, the 2nd technique must use the notation _2:model_, where model = 'google' or 'glove'
+       ###### Observation: If selected, the 2nd technique must use the notation _2:model_, where model = 'google' or 'glove' (_e.g.: 2:google_)
 
   * 5th: context selecting (0 or 1) [integer]
 	* _e.g.: 0_
