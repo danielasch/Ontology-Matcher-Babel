@@ -24,7 +24,7 @@
   
   ###### Observation: The memory usage depends on the size of the ontologies used.
   
-## VM arguments:				       
+## Program arguments:				       
  
   * 1st: domain ontology path [string]
 	* _e.g.: C:/Users/.../ontology.owl_
