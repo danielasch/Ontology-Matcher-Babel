@@ -75,7 +75,7 @@ public class SynsetDisambiguation {
         int i = cnpNameLemma.size();
         name = cnpNameLemma.get(i - 1);
 
-        System.out.println("\nConcept name: " + name + "\n");
+        //System.out.println("\nConcept name: " + name + "\n");
 
         BabelNetResource.SearchObject bestSynset;
         Set<BabelNetResource.SearchObject> searched = bn.search(name);
@@ -102,18 +102,18 @@ public class SynsetDisambiguation {
         BabelNetResource.SearchObject selected = null;
         int max = -1;
         for(BabelNetResource.SearchObject so : context_1) {
-            System.out.println(so.toString());
-            System.out.println(">SearchObject " + so.getSynset().getMainSense() + " context: " + so.getBgw());
-            System.out.println(">Ontology Context: " + context_2);
+            //System.out.println(so.toString());
+            //System.out.println(">SearchObject " + so.getSynset().getMainSense() + " context: " + so.getBgw());
+            //System.out.println(">Ontology Context: " + context_2);
             int test = intersection(so.getBgw(), context_2);
-            System.out.println(">Intersection: " + test);
+            //System.out.println(">Intersection: " + test);
             if (test > max) {
                 selected = so;
                 max = test;
             }
-            System.out.println("\n");
+            //System.out.println("\n");
         }
-        System.out.println("\nExiting Lesk Technique\n");
+        //System.out.println("\nExiting Lesk Technique\n");
         return selected;
     }
 

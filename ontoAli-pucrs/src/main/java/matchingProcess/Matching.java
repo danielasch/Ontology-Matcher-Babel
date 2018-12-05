@@ -29,7 +29,7 @@ public class Matching {
 	//BabelNet manipulation class
 	private BabelNetResource bn;
 	//Base resource for disambiguation process
-	private BaseResource base = new BaseResource(1, null);
+	private BaseResource base = new BaseResource();
 	//Lesk process class
 	private SynsetDisambiguation disamb = new SynsetDisambiguation(base);
 
