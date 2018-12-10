@@ -22,7 +22,7 @@
   * CPU:        Intel Core i5-3470S CPU@2.90GHzx4
   * OS-type:    64-bit
   
-  ###### Observation: The memory usage depends on the size of the ontologies used.
+  ###### Observation: The memory usage depends on the size of the selected ontologies.
   
 ## Program arguments:				       
  
