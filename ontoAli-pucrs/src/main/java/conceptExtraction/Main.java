@@ -9,12 +9,14 @@
 * @authors Henrique Kops & Rafael Basso              *
 ****************************************************/
 package conceptExtraction;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
 
+import matchingProcess.RdfGenerator;
 import org.apache.commons.io.output.TeeOutputStream;
 
 import matchingProcess.Matching;
@@ -26,7 +28,6 @@ import resources.Evaluator;
 import resources.OutFiles;
 import synsetSelection.SynsetDisambiguation;
 import synsetSelection.SynsetDisambiguationWE;
-//import synsetSelection.SynsetDisambiguationWE;
 
 /**
  * Main class which instantiates and calls all necessary classes
@@ -51,15 +52,19 @@ public class Main {
 
 	public static void main(String[] args) {
 		long start = sTime();
+
 		verify(args);
+
 		String model = spModel(args);
+
 		int tec = Integer.parseInt(args[3]);
+
 		switch(tec) {
 			case 1:
 				context(args);
 				break;
 			case 2:
-				//wordEmbedding(args, model);
+				wordEmbedding(args, model);
 				break;
 			default:
 				errorMessageDeault();
@@ -105,10 +110,10 @@ public class Main {
 		}
 	}
 
-	/*
-	//Unused method until now
+
 	private static void wordEmbedding(String[] args, String model) {
 		String topOnto = args[2].toLowerCase();
+		int context = Integer.parseInt(args[4]);
 		List<Concept> listDom;
 		List<Concept> listUp;
 		
@@ -116,22 +121,20 @@ public class Main {
 		switch(topOnto) {
 			case "dolce":
 				Ontology upperD = new Ontology("resources/DUL.owl");
-				listDom = domain(domain);
+				listDom = domain(domain,context);
 				listUp = dolce(upperD);
 				disambWE(listDom, model);
 				match(domain, upperD, args[1], listDom, listUp);
-				//matchDolce(domain, upperD, args[1], listDom, listUp);
-				outWNWE(args[1], listDom);
+				//outWNWE(args[1], listDom);
 				evaluate(args);
 				break;
 			case "sumo":
 				Ontology upperS = new Ontology("resources/sumo.owl");
-				listDom = domain(domain);
+				listDom = domain(domain,context);
 				listUp = sumo(upperS);
 				disambWE(listDom, model);
 				match(domain, upperS, args[1], listDom, listUp);
-				//matchSumo(domain, upperS, args[1], listDom, listUp);
-				outWNWE(args[1], listDom);
+				//outWNWE(args[1], listDom);
 				evaluate(args);
 				break;
 			default:
@@ -139,45 +142,10 @@ public class Main {
 				break;
 		}
 	}
-	*/
+
 
 //Context technique related methods
 
-	/**
-	 * Dolce's concept extraction
-	 */
-
-	private static List<Concept> dolce(Ontology upper) {
-		List<Concept> listUp;
-		ContextExtraction exct = new ContextExtraction();
-		listUp = exct.extractUpper(upper.getOntology());
-		return listUp;
-	}
-
-	/**
-	 * Sumo's concept extraction
-	 */
-
-	private static List<Concept> sumo(Ontology upperS) {
-		List<Concept> listUp;
-		ContextExtraction exct = new ContextExtraction();
-		listUp = exct.extractUpper(upperS.getOntology());
-		return listUp;
-	}
-
-	/**
-	 * Domain ontology concept extraction(using argued path)
-	 */
-
-	private static List<Concept> domain(Ontology domain, int context) {
-		List<Concept> listDom;
-		ContextExtraction exct = new ContextExtraction();
-		if(context == 0) {
-			listDom = exct.extract(domain.getOntology());
-		}
-		else listDom = exct.extractWithContext(domain.getOntology());
-		return listDom;
-	}
 
 	/**
 	 * Context disambiguation method
@@ -191,24 +159,25 @@ public class Main {
 		disam.disambiguation(listDom);
 	}
 
-	/**
-	 * BabelNet matching through hypernym search method
-	 */
-	private static void match(Ontology dom, Ontology up, String outPath, List<Concept>listDom, List<Concept>listUp){
-		Matching match = new Matching(outPath);
-		match.matchBabel(listDom, listUp);
-		match.outRdf(dom, up);
-	}
 
 	/**
 	 * Method that generates the .txt and .rdf files
 	 */
+
 	private static void out(String outPath, List<Concept> listDom) {
 		OutFiles out = new OutFiles(outPath);
 		out.outFile(listDom);
 	}
 
 //WordNet technique related methods
+
+	private static void disambWE(List<Concept> listDom, String model) {
+		BaseResource base = new BaseResource(model);
+		ContextProcessing proc = new ContextProcessing(base);
+		proc.process(listDom);
+		SynsetDisambiguationWE disam = new SynsetDisambiguationWE(base);
+		disam.disambiguation(listDom);
+	}
 
 	/*
 	private static List<Concept> dolceT(Ontology upperS) {
@@ -226,15 +195,7 @@ public class Main {
 		listUp = exct.extractUpperWE(upperS.getOntology());
 		return listUp;
 	}
-	*/
 
-	private static void disambWE(List<Concept> listDom, String model) {
-		BaseResource base = new BaseResource(model);
-		ContextProcessing proc = new ContextProcessing(base);
-		proc.process(listDom);
-		SynsetDisambiguationWE disam = new SynsetDisambiguationWE(base);
-		disam.disambiguation(listDom);
-	}
 
 	private static void matchWE(Ontology domain, Ontology upper, String outPath, List<Concept> listDom, List<Concept> listUp, String model) {
 		BaseResource base = new BaseResource(model);
@@ -247,12 +208,69 @@ public class Main {
 		match.outRdf(domain, upper);
 	}
 
+
 	private static void outWE(String outPath, List<Concept> listDom) {
 		OutFiles out = new OutFiles(outPath);
 		//out.out_file_we(listDom);
 	}
+	*/
 
 //Auxiliary methods
+
+
+	//Ontology related methods
+
+
+	/**
+	 * Dolce's concept extraction
+	 */
+
+	private static List<Concept> dolce(Ontology upper) {
+		List<Concept> listUp;
+		ContextExtraction exct = new ContextExtraction();
+		listUp = exct.extractUpper(upper.getOntology());
+		return listUp;
+	}
+
+
+	/**
+	 * Sumo's concept extraction
+	 */
+
+	private static List<Concept> sumo(Ontology upperS) {
+		List<Concept> listUp;
+		ContextExtraction exct = new ContextExtraction();
+		listUp = exct.extractUpper(upperS.getOntology());
+		return listUp;
+	}
+
+
+	/**
+	 * Domain ontology concept extraction(using argued path)
+	 */
+
+	private static List<Concept> domain(Ontology domain, int context) {
+		List<Concept> listDom;
+		ContextExtraction exct = new ContextExtraction();
+		if(context == 0) {
+			listDom = exct.extract(domain.getOntology());
+		}
+		else listDom = exct.extractWithContext(domain.getOntology());
+		return listDom;
+	}
+
+
+	/**
+	 * BabelNet matching through hypernym search method
+	 */
+	private static void match(Ontology dom, Ontology up, String outPath, List<Concept>listDom, List<Concept>listUp){
+		Matching match = new Matching();
+		RdfGenerator gen = new RdfGenerator(outPath);
+		gen.generateHeader(dom, up);
+		gen.mapEverything(match.matchBabel(listDom, listUp));
+
+	}
+
 
 	/**
 	 * Method that calls the evaluator of the .rdf files
@@ -263,11 +281,13 @@ public class Main {
 		if(args.length == 6) {
 			Evaluator eva = new Evaluator(args[5], args[1]); //REF, ALI
 			eva.evaluate();
-		}	
+		}
 	}
-	
-//Execution time methods
-	
+
+
+	//Time related methods
+
+
 	private static long sTime() {
 		long start = System.nanoTime();
 		return start;
@@ -296,8 +316,10 @@ public class Main {
 		System.out.println("Execution time: " + aux + ":" + sec);
 	}
 
-//Verification methods
-	
+
+	//Arguments verification related methods
+
+
 	/**
 	 * Verifies if the arguments argued are in the
 	 * right condition to execute the program
@@ -346,7 +368,23 @@ public class Main {
 		outputStream(outFileLog);	//LOG PATH + FILE NAME
 		return outFile; 	//RDF PATH + FILE NAME
 	}
-	
+
+
+	//Other methods
+
+
+	private static String spModel(String[] args) {
+		if(args[3].contains(":")) {
+			int aux = args[3].indexOf(":");
+			String model = args[3].substring(aux+1);
+			args[3] = args[3].substring(0, aux);
+			return model;
+		} else {
+			return "";
+		}
+	}
+
+
 	private static void outputStream(String outFileLog) {
 		try {
 			FileOutputStream fos = new FileOutputStream(outFileLog);
@@ -362,17 +400,7 @@ public class Main {
 			e.printStackTrace();
 		}
 	}
-	
-	private static String spModel(String[] args) {
-		if(args[3].contains(":")) {
-			int aux = args[3].indexOf(":");
-			String model = args[3].substring(aux+1);
-			args[3] = args[3].substring(0, aux);
-			return model;
-		} else {
-			return "";
-		}
-	}
+
 
 	private static void errorMessageDeault(){
 		System.out.println("Invalid arguments order, please try:\n" +

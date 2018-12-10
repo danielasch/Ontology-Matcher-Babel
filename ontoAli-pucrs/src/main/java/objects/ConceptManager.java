@@ -21,9 +21,7 @@ public class ConceptManager {
      * These methods calls protected methods from the Concept class,
      * permitting this class to manage the internal of a concept
      */
-    public String getConceptNameWn(Concept cnp) {
-        return cnp.spConceptName();
-    }
+    public String getConceptName(Concept cnp) { return cnp.getClassName(); }
 
     public void configOwlOntology(Concept cnp, OWLOntology onto) {
         cnp.setOwlOntology(onto);

@@ -166,4 +166,92 @@ public class StanfordLemmatizer {
 		return word;
 	}
 
+	/**
+	 * This method identify if the concept name is separated by under line, hyphen, UpperCase or
+	 * if the concept name is simple, and then it separates the concept name,
+	 * returning the last token or the simple term representing it
+	 */
+	public String spConceptName(String conceptName) {
+		String name = null;
+		String cnpName = conceptName;
+		if(cnpName.contains("_")) {
+			String words[];
+			words = cnpName.split("_");
+			int i = words.length;
+			name = words[i - 1];
+		} else if(cnpName.contains("-")) {
+			String words[];
+			words = cnpName.split("-");
+			int i = words.length;
+			name = words[i - 1];
+		} else if(hasUpperCase(cnpName)) {
+			int x = cnpName.length();
+			int up = 0;
+			for(int y = 1; y < x; y++) {
+				if(Character.isUpperCase(cnpName.charAt(y)) && y > up) {
+					up = y;
+				}
+			}
+			if(up != 0) {
+				name = cnpName.substring(up);
+			}
+		} else {
+			name = cnpName;
+		}
+		return name;
+	}
+
+	/**
+	 * This method returns the full name of a concept,
+	 * whether it is composed or not
+	 */
+
+	public String fullConceptName(String conceptName){
+		String name = conceptName;
+		if(hasUpperCase(name)){
+			int first = 0;
+			int last = 0;
+			List<String> words = new ArrayList<>();
+			for(char c : name.toCharArray()){
+				if(Character.isUpperCase(c)){
+					if(first != last) {
+						words.add(name.substring(first, last));
+						first = last;
+					}
+				}
+				last++;
+			}
+			if(first != name.length()) words.add(name.substring(first,last));
+			String ans = "";
+			for(String s: words){
+				ans += s + " ";
+			}
+			return ans;
+		}
+		else{
+			name.replaceAll("_", " ");
+			name.replaceAll("-", " ");
+			name.replaceAll("_", " ");
+			name.replaceAll("-", " ");
+		}
+		return name;
+	}
+
+	/**
+	 * This methods tests if a string contains upper cased letters
+	 */
+	private boolean hasUpperCase(String word) {
+
+		int x = word.length();
+
+		for(int y = 1; y < x; y++) {
+			if(Character.isUpperCase(word.charAt(y))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+
 }

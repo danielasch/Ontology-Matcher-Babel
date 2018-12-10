@@ -40,7 +40,6 @@ public class BabelNetResource {
             this.order = order;
             this.bs = bs;
             setBgw(babelBow(this.senses, this.glosses));
-            System.out.println(this.toString());
         }
 
 
@@ -100,7 +99,6 @@ public class BabelNetResource {
         int order = 0;
         hypernyms.clear();
 
-        System.out.println("\n>>>get hyp method ("+bs+")");
         List<BabelSynsetRelation> lbsr = bs.getOutgoingEdges(BabelPointer.ANY_HYPERNYM);
 
         if(lbsr == null || lbsr.size() == 0) { return hypernyms; }
@@ -115,7 +113,6 @@ public class BabelNetResource {
             if(basy.getID() != bs.getID()) {
                 if(!searched.contains(basy)) {
                     hypernyms.add(so);
-                    System.out.println("added " + basy.getMainSense() + " to hyp");
                 }
             }
         }

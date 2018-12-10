@@ -2,8 +2,7 @@ package resources;
 
 import java.util.*;
 
-import edu.mit.jwi.item.ISynset;
-import it.uniroma1.lcl.babelnet.BabelSynset;
+import synsetSelection.SynsetDisambiguationWE;
 
 /**
  * This class saves the information (about a concept) used to generate the text files.
@@ -13,8 +12,8 @@ public class Utilities {
 //Attributes
 	
 	private Set<BabelNetResource.SearchObject> synsetCntxt;
-	private List<Double> listMedia;
-	private LinkedHashMap<BabelSynset, LinkedHashMap<String, LinkedHashMap<String, Double> > > mapPairSim;
+	private List<SynsetDisambiguationWE.WordEmbeddingObject> mappings;
+	private SynsetDisambiguationWE.WordEmbeddingObject bestWePair;
 	private String hypernyms, selected_hypernym;
 	private int numSy, level;
 
@@ -24,16 +23,11 @@ public class Utilities {
 	public Utilities() {
 		this.synsetCntxt = null;
 		this.numSy = level = 0;
-		this.listMedia = null;
-		this.hypernyms = null;
-		this.selected_hypernym = null;
-		//this.mapPairSim = null;
+
 	}
 
 
 //Getters
-
-    //public void setSynsetCntx(HashMap<BabelSynset, List<String>> _synsetCntxt) { this.synsetCntxt = _synsetCntxt; }
 
     public Set<BabelNetResource.SearchObject> getSynsetCntx() { return synsetCntxt; }
 
@@ -47,9 +41,9 @@ public class Utilities {
 
     public int getLevel() { return level; }
 
-    public List<Double> getSynsetMedia() { return listMedia; }
+    public List<SynsetDisambiguationWE.WordEmbeddingObject> getMappings() { return mappings; }
 
-    public LinkedHashMap<BabelSynset,LinkedHashMap<String,LinkedHashMap<String,Double>>> getPairSim() { return mapPairSim; }
+    public SynsetDisambiguationWE.WordEmbeddingObject getBestPair() { return bestWePair; }
 
 
 //Setters
@@ -66,10 +60,8 @@ public class Utilities {
 
     public void setLevel(int level) { this.level = level; }
 
-    public void setSynsetMedia(List<Double> _synsetMedia) { this.listMedia = _synsetMedia; }
+    public void setMappings(List<SynsetDisambiguationWE.WordEmbeddingObject> map) { this.mappings = map; }
 
-	public void setPairSim(LinkedHashMap<BabelSynset, LinkedHashMap<String, LinkedHashMap<String, Double> > > _mapPairSim) {
-		this.mapPairSim = _mapPairSim;
-	}
+	public void setBestPair(SynsetDisambiguationWE.WordEmbeddingObject weObj) { this.bestWePair = weObj; }
 
 }

@@ -1,11 +1,9 @@
 package synsetSelection;
 
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import it.uniroma1.lcl.babelnet.BabelSynset;
 import objects.Concept;
 import objects.ConceptManager;
 import resources.BabelNetResource;
@@ -20,9 +18,48 @@ import resources.Utilities;
 */
 public class SynsetDisambiguationWE {
 
+	/**
+	 * Object to represent the similarity between the context of
+	 * a synset x the context of a concept, called 'mapped pair'
+	*/
+
+	public class WordEmbeddingObject{
+
+	//Attributes
+
+		private BabelNetResource.SearchObject originSynset;
+		private Concept originConcept;
+		private Set<String> bagConcept;
+		private Double similarity;
+
+	//Constructor
+
+		public WordEmbeddingObject(BabelNetResource.SearchObject originSynset, Concept originConcept){
+			this.originSynset = originSynset;
+			this.originConcept = originConcept;
+		}
+
+	//Getters
+
+		public Set<String> getBagSynset() { return originSynset.getBgw(); }
+
+		public Set<String> getBagConcept() {return bagConcept; }
+
+		public Double getSimilarity() { return similarity; }
+
+		public BabelNetResource.SearchObject getOriginSynset() { return originSynset; }
+
+		public Concept getOriginConcept() { return originConcept; }
+
+		//Setters
+
+		public void setBagConcept(Set<String> bagConcept) { this.bagConcept = bagConcept; }
+
+		public void setSimilarity(Double similarity) { this.similarity = similarity; }
+	}
+
 //Attributes
 
-	//BaseResource contains the necessary resources to execute the disambiguation
 	private BaseResource base;
 	private BabelNetResource bn;
 
@@ -33,6 +70,7 @@ public class SynsetDisambiguationWE {
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 		System.out.println(sdf.format(Calendar.getInstance().getTime()) + " - [log] - Synset didambiguation with Word embedding selected!" );
 		this.base = _base;
+		this.bn = new BabelNetResource();
 	}
 
 
@@ -57,16 +95,11 @@ public class SynsetDisambiguationWE {
 	 *
      */
 	public void disambiguation(List<Concept> listCon) {
-		try {
-			initLog();
-			for(Concept concept: listCon) {
-				rcGoodSynset(concept);
-			}
-			finalLog();
-		} catch(IOException e) {
-			System.out.println("I/O operation failed - WN dictinoary!");
-			System.out.println("error: " + e);
+		initLog();
+		for (Concept concept : listCon) {
+			rcGoodSynset(concept);
 		}
+		finalLog();
 	}
 
 
@@ -74,82 +107,70 @@ public class SynsetDisambiguationWE {
 	 * Disambiguation process 
 	 *
 	 */
-	void rcGoodSynset(Concept concept) throws IOException {
-		//The lemmatizer
-		bn = new BabelNetResource();
+	void rcGoodSynset(Concept concept)  {
+
 		StanfordLemmatizer slem = this.base.getLemmatizer();
 		ConceptManager man = new ConceptManager();
-		//Utilities carries the temp1 list and the temp2 list of a concept
 		Utilities ut = new Utilities();
-		//temp2 saves the averages between the context and the bag of words of a concept (OutFiles use only)
-		ArrayList<Double> temp2 = new ArrayList<Double>();
-		LinkedHashMap<BabelSynset, LinkedHashMap<String, LinkedHashMap<String, Double> > > temp3 = new LinkedHashMap<>();
-		List<String> context = slem.toList(concept.getContext());
-		//name receive the concept name
-		String name = man.getConceptNameWn(concept);
-		//lemmatize the concept name
-		List<String> cnpNameLemma = slem.lemmatize(name);
-		int i = cnpNameLemma.size();
-		//name receive the concept name lemmatized
-		name = cnpNameLemma.get(i - 1);
-        BabelNetResource.SearchObject bestSynset = null;
-        Set<BabelNetResource.SearchObject> searched = bn.search(name);
-		if(searched.size()!=0) {
-			double max = 0;
-			for (BabelNetResource.SearchObject s : searched) {
-			    LinkedHashMap<String, LinkedHashMap<String, Double> > temp4 = new LinkedHashMap<>();
-			    double auxT = 0;
-			    for(String cntxtEl: context) {
-			    	LinkedHashMap<String, Double> temp5 = new LinkedHashMap<>();
-			    	double aux1 = 0;
-			    	//For each element of the bag of words
-			    	for(String bgwEl: s.getBgw()) {
-			    		//Verifies the similarity between the context element and the bag of words element
-			    		double sim = this.base.getWord2Vec().getword2Vec().similarity(cntxtEl, bgwEl);
-			    		//condition that verifies if the similarity recovered is not null,
-			    		//if is null then the similarity receives 0
-			    		if(!(Double.isNaN(sim))) {
-			    			//increment the aux1 and adds the similarity
-		                    aux1 = aux1 + sim * 10;
-		                }
-			    		temp5.put(bgwEl, sim * 10);
-			    	}
-			    	temp4.put(cntxtEl, temp5);
-			    //makes the average between context element and all bag of words elements,
-			    //dividing aux1 by the bag of words size
-			    aux1 = aux1 / s.getBgw().size();
-			    //increment the auxT and adds the previous average
-			    auxT = auxT + aux1;
+		List<WordEmbeddingObject> mapping = new ArrayList<>();
+		WordEmbeddingObject selected = null;
+
+		Set<String> context = slem.toSet(slem.toList(concept.getContext()));
+
+		String name = man.getConceptName(concept);
+		String lemmaName = slem.spConceptName(name);
+
+		BabelNetResource.SearchObject bestSynset = null;
+        Set<BabelNetResource.SearchObject> searched = bn.search(lemmaName);
+
+		if(!searched.isEmpty()) {
+
+			double maxAverage = 0;
+
+
+			for (BabelNetResource.SearchObject synset : searched) {
+
+				double totalAverage = 0;
+				WordEmbeddingObject weObj = new WordEmbeddingObject(synset, concept);
+
+			    for(String cntxElement: context) {
+
+			    	double average = 0;
+
+			    	for(String bagElement: synset.getBgw()) {
+
+						double sim = this.base.getWord2Vec().getword2Vec().similarity(cntxElement, bagElement);
+
+						if (!(Double.isNaN(sim))) average = average + sim * 10;
+
+					}
+
+			    	average = average / synset.getBgw().size();
+			    	totalAverage += average;
 			    }
-			    //makes the total average between the previous averages and the context size,
-			    //dividing auxT by context size
-			    auxT = auxT / context.size();
-			    //adds the total average into a list
-			    temp2.add(auxT);
-			    //the synset with the higher auxT is selected as the right one
-			    if(auxT > max) {
-			    	max = auxT;
-			    	//sets the synset of a concept
-                    bestSynset = s;
+
+			    totalAverage = totalAverage / context.size();
+
+			    weObj.setSimilarity(totalAverage);
+			    weObj.setBagConcept(context);
+			    mapping.add(weObj);
+
+				if(totalAverage> maxAverage) {
+			    	maxAverage = totalAverage;
+                    bestSynset = synset;
 			    }
-                man.configSynset(concept, bestSynset);
-                temp3.put(s.getSynset(), temp4);
 			}
+			man.configSynset(concept, bestSynset);
 		}
-		//utilities sets the synset and the bag of words map
 		ut.setSynsetCntx(searched);
-		//utilities sets the total average list
-		ut.setSynsetMedia(temp2);
-		ut.setPairSim(temp3);
-		//sets the utilities of a concept
+		ut.setMappings(mapping);
+		ut.setBestPair(selected);
 		man.configUtilities(concept, ut);
 	}
 
 
-	/**
-	 * create the bag of words of a synset
-	 */
 
+	//create the bag of words of a synset
 	/*
 	private List<String> createBagWords(List<IWord> wordsSynset, String glossSynset) {
 	    List<String> list = new LinkedList<String>();

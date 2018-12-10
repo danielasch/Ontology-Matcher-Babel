@@ -1,9 +1,7 @@
 package objects;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import it.uniroma1.lcl.babelnet.BabelSynset;
 import org.semanticweb.owlapi.model.OWLClass;
@@ -206,58 +204,6 @@ public class Concept {
 		} else {
 			System.out.println("Synset: null" + "\n");
 		}
-	}
-
-	
-	/**
-	 * This method identify if the concept name is separated by under line, or hyphen, or UpperCase or 
-	 * if the concept name is simple, and then it separates the concept name,
-	 * returning the last token or the simple term representing it
-	 */
-	protected String spConceptName() {
-		String name = null;
-		String cnpName = this.className;
-		if(cnpName.contains("_")) {
-			String words[];
-			words = cnpName.split("_");
-			int i = words.length;
-			name = words[i - 1];	
-		} else if(cnpName.contains("-")) {
-			String words[];
-			words = cnpName.split("-");
-			int i = words.length;
-			name = words[i - 1];
-		} else if(hasUpperCase(cnpName)) {
-			int x = cnpName.length();
-			int up = 0;
-			for(int y = 1; y < x; y++) {
-				if(Character.isUpperCase(cnpName.charAt(y)) && y > up) {
-					up = y;	
-				}	
-			}
-			if(up != 0) {
-				name = cnpName.substring(up);
-			}
-		} else {
-			name = cnpName;
-		}
-		return name;
-	}	
-
-
-	/**
-	 * This methods tests if a string contains upper cased letters
-	 */
-	private boolean hasUpperCase(String word) {
-		
-		int x = word.length();
-		
-		for(int y = 1; y < x; y++) {
-			if(Character.isUpperCase(word.charAt(y))) {
-				return true;
-			}	
-		}
-		return false;	
 	}
 	
 }

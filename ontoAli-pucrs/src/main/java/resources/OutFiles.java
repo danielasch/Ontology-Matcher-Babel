@@ -11,11 +11,11 @@ import objects.Concept;
 /**
  * This class generates the text files
  */
+
 public class OutFiles {
 	
 //Attributes
 	
-	//Contains path to write the text files
 	private String outPath;
 
 
@@ -26,6 +26,7 @@ public class OutFiles {
 	 * change .rdf by _1.text, this way, the text file will be
 	 * generated at the save folder as the alignment
 	 */
+
 	public OutFiles(String path) {
 		String aux = path.replace(".rdf", "_1.txt");
 		this.outPath = aux;
@@ -37,6 +38,7 @@ public class OutFiles {
 	/**
 	 * Generates the text file for the overlapping technique
 	 */
+
 	public void outFile(List<Concept> listDomain) {
 		try {
 			FileWriter arq = new FileWriter(this.outPath);
@@ -106,7 +108,8 @@ public class OutFiles {
 	/**
 	 * Generates the text file for the Word Embeddings technique
 	 */
-	public void outFileWeWn(List<Concept> listDomain) {
+
+	public void outFileWe(List<Concept> listDomain) {
 		try {
 			FileWriter arq = new FileWriter(this.outPath);
 			PrintWriter printer = new PrintWriter(arq);
@@ -140,7 +143,7 @@ public class OutFiles {
 					Set<String> cntxt = so.getBgw();
 					printer.print(so.getSynset() + " | " + so.getGlosses() + "\n");
 					printer.print("BOW: " + cntxt.toString() + "\n");
-					printer.print("MEDIA: " + cnp.getUtilities().getSynsetMedia().get(index).toString());
+					printer.print("MEDIA: " + cnp.getUtilities().getMappings().get(index).toString());
 					index++;	
 					printer.print("\n\n");
 				}

@@ -1,6 +1,5 @@
 package synsetSelection;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -67,18 +66,24 @@ public class SynsetDisambiguation {
         StanfordLemmatizer slem = base.getLemmatizer();
         ConceptManager man = new ConceptManager();
         Utilities ut = new Utilities();
+        BabelNetResource.SearchObject bestSynset;
 
         List<String> context = slem.toList(concept.getContext());
-        String name = man.getConceptNameWn(concept);
-        List<String> cnpNameLemma = slem.lemmatize(name);
+        String name = man.getConceptName(concept);
 
-        int i = cnpNameLemma.size();
-        name = cnpNameLemma.get(i - 1);
+        String lemmaName = slem.fullConceptName(name);
+        Set<BabelNetResource.SearchObject> searched = bn.search(lemmaName);
 
-        //System.out.println("\nConcept name: " + name + "\n");
+        System.out.println("\nConcept name: " + lemmaName + "\n");
 
-        BabelNetResource.SearchObject bestSynset;
-        Set<BabelNetResource.SearchObject> searched = bn.search(name);
+        if(searched.isEmpty()){
+            System.out.println("failed");
+            lemmaName = slem.spConceptName(name);
+            searched = bn.search(lemmaName);
+            System.out.println("\nConcept name: " + lemmaName + "\n");
+        }
+
+        System.out.println("success");
 
         if (searched.size() != 1) {
             bestSynset = leskTechnique(searched, context);
@@ -98,7 +103,7 @@ public class SynsetDisambiguation {
 
     public BabelNetResource.SearchObject leskTechnique(Set<BabelNetResource.SearchObject>context_1,
                                                        List<String>context_2){
-        System.out.println("\nEntering Lesk Technique\n");
+        //System.out.println("\nEntering Lesk Technique\n");
         BabelNetResource.SearchObject selected = null;
         int max = -1;
         for(BabelNetResource.SearchObject so : context_1) {
