@@ -17,19 +17,16 @@ public class Evaluator {
 	
 //Attributes
 	
-	//Path to the reference alignment
-	String ref;
-	//Path to the generated alignment
-	String alin;
-	//The evaluator
+	String referenceAlignment;
+	String alignment;
 	PRecEvaluator evaluator;
 
 
 //Constructor
 	
-	public Evaluator(String ref, String alin) {
-		setAlignment(alin);
-		setReference(ref);
+	public Evaluator(String referenceAlignment, String alignment) {
+		setAlignment(alignment);
+		setReference(referenceAlignment);
 	}
 
 
@@ -48,22 +45,22 @@ public class Evaluator {
     }
 
 	String getReference() {
-		return this.ref;
+		return this.referenceAlignment;
 	}
 
     String getAlignment() {
-        return this.alin;
+        return this.alignment;
     }
 
 
 //Setters
 
     void setReference(String _ref) {
-        this.ref = _ref;
+        this.referenceAlignment = _ref;
     }
 
 	void setAlignment(String _alin) {
-		this.alin = _alin;
+		this.alignment = _alin;
 	}
 
 
@@ -75,22 +72,19 @@ public class Evaluator {
 	public void evaluate() {
 		Alignment ref;
 		Alignment alin;
-		
-		//The parser shows how to analyze the XML file
+
 		AlignmentParser ap1 = new AlignmentParser(0);
 		AlignmentParser ap2 = new AlignmentParser(0);
 		log();
 		try {
 			ref = ap1.parse(new File(getReference()).toURI() );
 			alin = ap2.parse(new File(getAlignment()).toURI());
-			
 			Properties p = new Properties();
-			//Instantiation of the evaluator
-			//Always put the reference alignment as the first argument
 			PRecEvaluator eva = new PRecEvaluator(ref, alin);
 			eva.eval(p);
 			System.out.println("REF - ALI:\n" + "F-Measure: " + eva.getFmeasure() + "\nPrecision:  " + eva.getPrecision() + "\nRecall: " + eva.getRecall() + "\nOverall: " + eva.getOverall());
-		} catch (AlignmentException e) {
+		}
+		catch (AlignmentException e) {
 			System.out.println("error: Reference-Alignment, or Alignment: format");
 			e.printStackTrace();
 		}

@@ -12,11 +12,9 @@ import org.deeplearning4j.models.word2vec.Word2Vec;
 public class Word2Vector {
 	
 //Attributes
-	
-	//Word Embedding model File, this file is located at resources folder
-	private File gModel;
-	//Word2Vec contains the model read
-	private Word2Vec w2V;
+
+	private File gModel;		//Word Embedding model File located at resources folder
+	private Word2Vec w2V;		//Word2Vec contains the selected model
 
 
 //Log method
@@ -32,8 +30,8 @@ public class Word2Vector {
 	protected Word2Vector(String model) {
 		initLog();
 		verifyModel(model);
-		//read the w2v model from the gModel attribute (that contains the model file)
-		this.w2V = WordVectorSerializer.readWord2VecModel(gModel);
+		this.w2V = WordVectorSerializer.readWord2VecModel(gModel);		//read the w2v model from the gModel attribute
+																		// (that contains the model file)
 	}
 
 
@@ -45,7 +43,11 @@ public class Word2Vector {
 
 
 //Methods
-	
+
+	/**
+	 * Method that verifies which model is being used for generating
+	 * the similarity between two contexts (used at we 'synset disambiguation')
+	 */
 	private void verifyModel(String model) {
 		switch(model.toLowerCase()) {
 			case "google": this.gModel = new File("resources/GoogleNews-vectors-negative300.bin.gz");

@@ -20,7 +20,6 @@ import matchingProcess.RdfGenerator;
 import org.apache.commons.io.output.TeeOutputStream;
 
 import matchingProcess.Matching;
-import matchingProcess.MatchingWE;
 import objects.Concept;
 import objects.Ontology;
 import resources.BaseResource;
@@ -41,7 +40,7 @@ public class Main {
  * arg 1 = path to out .rdf (match)
  * arg 2 = string selection for "dolce" or "sumo"
  * arg 3 = integer representing the technique to be used
- * 		if case 2 -> 2:model [model = google or glove]
+ * 		OBS: if technique = 2 -> 2:model [model = google or glove]
  * arg 4 = integer representing hole ontology as context [0 : no, 1 : yes]
  * arg 5 = option parameter representing the path to the referece alignment
 */
@@ -73,13 +72,16 @@ public class Main {
 		fTime(start);
 	}
 
+
 	/**
 	 * Context technique which overlaps between the concept's context
-	 * and the recovered babelnet synset bag of words
+	 * and the recovered BabelNet synset bag of words looking for the
+	 * greatest number of intersections
 	 */
 
 	private static void context(String[] args) {
 		String topOnto = args[2].toLowerCase();
+		int tec = Integer.parseInt(args[3]);
 		int context = Integer.parseInt(args[4]);
 		List<Concept> listDom;
 		List<Concept> listUp;
@@ -92,7 +94,7 @@ public class Main {
 				listUp = dolce(upperD);
 				disamb(listDom);
 				match(domain, upperD, args[1], listDom, listUp);
-				out(args[1], listDom);
+				out(args[1], listDom, tec);
 				evaluate(args);
 				break;
 			case "sumo":
@@ -101,7 +103,7 @@ public class Main {
 				listUp = sumo(upperS);
 				disamb(listDom);
 				match(domain, upperS, args[1], listDom, listUp);
-				out(args[1], listDom);
+				out(args[1], listDom, tec);
 				evaluate(args);
 				break;
 			default:
@@ -111,8 +113,16 @@ public class Main {
 	}
 
 
+	/**
+	 * Word embedding technique which overlaps between the concept's context
+	 * and the recovered BabelNet synset bag of words using 'word to vector'
+	 * parametrized model in order to generate an average of every pair of
+	 * contexts, selecting the greatest one
+	 */
+
 	private static void wordEmbedding(String[] args, String model) {
 		String topOnto = args[2].toLowerCase();
+		int tec = Integer.parseInt(args[3]);
 		int context = Integer.parseInt(args[4]);
 		List<Concept> listDom;
 		List<Concept> listUp;
@@ -120,12 +130,12 @@ public class Main {
 		Ontology domain = new Ontology(args[0]);
 		switch(topOnto) {
 			case "dolce":
-				Ontology upperD = new Ontology("resources/DUL.owl");
+				Ontology upperD = new Ontology("resources/DLP_397_Edited.owl");
 				listDom = domain(domain,context);
 				listUp = dolce(upperD);
 				disambWE(listDom, model);
 				match(domain, upperD, args[1], listDom, listUp);
-				//outWNWE(args[1], listDom);
+				out(args[1], listDom, tec);
 				evaluate(args);
 				break;
 			case "sumo":
@@ -134,7 +144,7 @@ public class Main {
 				listUp = sumo(upperS);
 				disambWE(listDom, model);
 				match(domain, upperS, args[1], listDom, listUp);
-				//outWNWE(args[1], listDom);
+				out(args[1], listDom, tec);
 				evaluate(args);
 				break;
 			default:
@@ -159,16 +169,6 @@ public class Main {
 		disam.disambiguation(listDom);
 	}
 
-
-	/**
-	 * Method that generates the .txt and .rdf files
-	 */
-
-	private static void out(String outPath, List<Concept> listDom) {
-		OutFiles out = new OutFiles(outPath);
-		out.outFile(listDom);
-	}
-
 //WordNet technique related methods
 
 	private static void disambWE(List<Concept> listDom, String model) {
@@ -178,42 +178,6 @@ public class Main {
 		SynsetDisambiguationWE disam = new SynsetDisambiguationWE(base);
 		disam.disambiguation(listDom);
 	}
-
-	/*
-	private static List<Concept> dolceT(Ontology upperS) {
-		List<Concept> listUp = new ArrayList<Concept>();
-
-		ContextExtraction exct = new ContextExtraction();
-		listUp = exct.extractUpperWE(upperS.getOntology());
-		return listUp;
-	}
-
-	private static List<Concept> sumoT(Ontology upperS) {
-		List<Concept> listUp = new ArrayList<Concept>();
-
-		ContextExtraction exct = new ContextExtraction();
-		listUp = exct.extractUpperWE(upperS.getOntology());
-		return listUp;
-	}
-
-
-	private static void matchWE(Ontology domain, Ontology upper, String outPath, List<Concept> listDom, List<Concept> listUp, String model) {
-		BaseResource base = new BaseResource(model);
-		ContextProcessing proc = new ContextProcessing(base);
-		proc.procWE(listDom);
-		proc.procWE(listUp);
-
-		MatchingWE match = new MatchingWE(outPath, base);
-		match.matchInv(listDom, listUp);
-		match.outRdf(domain, upper);
-	}
-
-
-	private static void outWE(String outPath, List<Concept> listDom) {
-		OutFiles out = new OutFiles(outPath);
-		//out.out_file_we(listDom);
-	}
-	*/
 
 //Auxiliary methods
 
@@ -282,6 +246,15 @@ public class Main {
 			Evaluator eva = new Evaluator(args[5], args[1]); //REF, ALI
 			eva.evaluate();
 		}
+	}
+
+	/**
+	 * Method that generates the .txt and .rdf files
+	 */
+
+	private static void out(String outPath, List<Concept> listDom, int option) {
+		OutFiles out = new OutFiles(outPath);
+		out.outFile(listDom, option);
 	}
 
 

@@ -4,6 +4,7 @@ package synsetSelection;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import fr.inrialpes.exmo.align.impl.Similarity;
 import objects.Concept;
 import objects.ConceptManager;
 import resources.BabelNetResource;
@@ -12,15 +13,44 @@ import resources.StanfordLemmatizer;
 import resources.Utilities;
 
 /**
- * This class disambiguate the synset using the Word Embedding model from GloVe.
- * Model specifications - 6B tokens, 400K vocab, uncased, & 200d vectors.
- *
+ * This class disambiguates a synset using the 'Word Embedding' parametrized model from GloVe/Google
 */
-public class SynsetDisambiguationWE {
+public class SynsetDisambiguationWE  {
+
+    /**
+     * Object to represent the similarity between a pair of elements,
+     * one from a concept context and the other from a synset context
+     */
+
+    private class WordEmbbedingPair{
+
+    //Attributes
+
+        private String synsetContextElement;
+        private String conceptContextElement;
+        private Double modelSimilarity;
+
+    //Constructor
+
+        public WordEmbbedingPair( String conceptContextElement, String synsetContextElement, Double modelSimilarity) {
+            this.conceptContextElement = conceptContextElement;
+            this.synsetContextElement = synsetContextElement;
+            this.modelSimilarity = modelSimilarity;
+        }
+
+    //Getters
+
+        public String getConceptContextElement() { return conceptContextElement; }
+
+        public String getSynsetContextElement() { return synsetContextElement; }
+
+        public Double getModelSimilarity() { return modelSimilarity; }
+
+    }
 
 	/**
-	 * Object to represent the similarity between the context of
-	 * a synset x the context of a concept, called 'mapped pair'
+	 * Object to represent the similarity between a concept and
+	 * a synset called 'mapped pair'
 	*/
 
 	public class WordEmbeddingObject{
@@ -29,21 +59,19 @@ public class SynsetDisambiguationWE {
 
 		private BabelNetResource.SearchObject originSynset;
 		private Concept originConcept;
-		private Set<String> bagConcept;
 		private Double similarity;
+		private Set<WordEmbbedingPair> distributivePairs;
 
 	//Constructor
 
 		public WordEmbeddingObject(BabelNetResource.SearchObject originSynset, Concept originConcept){
 			this.originSynset = originSynset;
 			this.originConcept = originConcept;
+			this.distributivePairs = new HashSet<>();
 		}
 
 	//Getters
 
-		public Set<String> getBagSynset() { return originSynset.getBgw(); }
-
-		public Set<String> getBagConcept() {return bagConcept; }
 
 		public Double getSimilarity() { return similarity; }
 
@@ -51,11 +79,30 @@ public class SynsetDisambiguationWE {
 
 		public Concept getOriginConcept() { return originConcept; }
 
-		//Setters
+		public Set getDistributivePairs() { return this.distributivePairs; }
 
-		public void setBagConcept(Set<String> bagConcept) { this.bagConcept = bagConcept; }
+	//Setters
 
 		public void setSimilarity(Double similarity) { this.similarity = similarity; }
+
+	//Methods
+
+		public String toString(){
+		    int count = 1;
+		    String s =  "|Concept: " + this.originConcept.getClassName() + "\n";
+		    s +=        "|Synset: " + this.originSynset.getSynset().getMainSense() + "\n";
+		    s +=        "|Similarity: " + this.similarity + "\n";
+		    s +=        "\nPAIRS:\n";
+
+		    for(WordEmbbedingPair wePair : this.distributivePairs){
+		        s += "<PAIR " + count + "> " + wePair.conceptContextElement +
+                        " & " + wePair.synsetContextElement +
+                        " -> " + wePair.modelSimilarity + "\n";
+		        count ++;
+            }
+
+		    return s;
+        }
 	}
 
 //Attributes
@@ -91,24 +138,24 @@ public class SynsetDisambiguationWE {
 //Methods
 
 	/**
-	 * This method selects the right synset to a concept
-	 *
+	 * This method selects the right synset for all concepts
+     * which came from a certain domain-level ontology
      */
 	public void disambiguation(List<Concept> listCon) {
 		initLog();
 		for (Concept concept : listCon) {
-			rcGoodSynset(concept);
+			bestSynset(concept);
 		}
 		finalLog();
 	}
 
 
 	/**
-	 * Disambiguation process 
+	 * Word embeddings disambiguation process based on the average cossine distance between a
+     * concept context and a synset context
 	 *
 	 */
-	void rcGoodSynset(Concept concept)  {
-
+	void bestSynset(Concept concept)  {
 		StanfordLemmatizer slem = this.base.getLemmatizer();
 		ConceptManager man = new ConceptManager();
 		Utilities ut = new Utilities();
@@ -124,35 +171,26 @@ public class SynsetDisambiguationWE {
         Set<BabelNetResource.SearchObject> searched = bn.search(lemmaName);
 
 		if(!searched.isEmpty()) {
-
 			double maxAverage = 0;
 
-
 			for (BabelNetResource.SearchObject synset : searched) {
-
 				double totalAverage = 0;
 				WordEmbeddingObject weObj = new WordEmbeddingObject(synset, concept);
 
 			    for(String cntxElement: context) {
-
 			    	double average = 0;
 
 			    	for(String bagElement: synset.getBgw()) {
-
 						double sim = this.base.getWord2Vec().getword2Vec().similarity(cntxElement, bagElement);
+						weObj.distributivePairs.add(new WordEmbbedingPair(cntxElement, bagElement, sim));
 
-						if (!(Double.isNaN(sim))) average = average + sim * 10;
-
+                        if (!(Double.isNaN(sim))) average = average + sim * 10;
 					}
-
 			    	average = average / synset.getBgw().size();
 			    	totalAverage += average;
 			    }
-
 			    totalAverage = totalAverage / context.size();
-
 			    weObj.setSimilarity(totalAverage);
-			    weObj.setBagConcept(context);
 			    mapping.add(weObj);
 
 				if(totalAverage> maxAverage) {
@@ -167,47 +205,4 @@ public class SynsetDisambiguationWE {
 		ut.setBestPair(selected);
 		man.configUtilities(concept, ut);
 	}
-
-
-
-	//create the bag of words of a synset
-	/*
-	private List<String> createBagWords(List<IWord> wordsSynset, String glossSynset) {
-	    List<String> list = new LinkedList<String>();
-	    Set<String> set = new HashSet<String>();
-	    StanfordLemmatizer slem = this.base.getLemmatizer();
-	    for (IWord i : wordsSynset) {
-	    	StringTokenizer st = new StringTokenizer(i.getLemma().toLowerCase().replace("_"," ")," ");
-	    	while (st.hasMoreTokens()) {
-	    		  String token = st.nextToken();
-	    	 	  if (!list.contains(token)) {
-	    	  	      list.add(token);
-	    	      }
-	    	}
-	    }
-	    glossSynset = glossSynset.replaceAll(";"," ").replaceAll("\"", " ").replaceAll("-"," ").toLowerCase();
-	    StringTokenizer st = new StringTokenizer(glossSynset," ");
-    	while (st.hasMoreTokens()) {
-    		   String token = st.nextToken().toLowerCase();
-    		   token = rm_specialChar(token);
-    		   if (!this.base.getStpWords().contains(token) && !list.contains(token)) {
-    			   list.add(token);
-    		   }
-    	}
-    	//turn the list into a string to lemmatize the list
-    	String toLemma = slem.toLemmatize(list);
-    	//clears the list
-		list.clear();
-		//list receive the string lemmatized
-		list = slem.lemmatize(toLemma);
-		//turns the list into a set,
-		//to avoid repeated lemmatized strings
-		set =  slem.toSet(list);
-		//turns back the set into a list
-		list = slem.toList(set);
-	   return list;
-	}
-    */
-
-
 }

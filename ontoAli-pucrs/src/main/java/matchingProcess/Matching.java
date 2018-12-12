@@ -16,7 +16,7 @@ import resources.Utilities;
 import synsetSelection.SynsetDisambiguation;
 
 /**
- * This class matches Domain Ont. classes with Top Ont. classes
+ * This class matches domain-level ontology concepts with top-level ontology concepts
  */
 
 public class Matching {

@@ -53,16 +53,19 @@ public class SynsetDisambiguation {
     public void disambiguation(List<Concept> listCon) {
             initLog();
             for (Concept concept : listCon) {
-                rcGoodSynset(concept);
+                bestSynset(concept);
             }
             finalLog();
     }
 
 
     /**
-     * Disambiguation process
+     * Lesk disambiguation process based on the overlapping between a concept context
+     * and a synset context in order to select the greatest intersection value between
+     * the generated distributive
      */
-    public void rcGoodSynset(Concept concept) {
+
+    public void bestSynset(Concept concept) {
         StanfordLemmatizer slem = base.getLemmatizer();
         ConceptManager man = new ConceptManager();
         Utilities ut = new Utilities();
@@ -83,7 +86,9 @@ public class SynsetDisambiguation {
             System.out.println("\nConcept name: " + lemmaName + "\n");
         }
 
-        System.out.println("success");
+        if(!searched.isEmpty()) {
+            System.out.println("success");
+        }
 
         if (searched.size() != 1) {
             bestSynset = leskTechnique(searched, context);

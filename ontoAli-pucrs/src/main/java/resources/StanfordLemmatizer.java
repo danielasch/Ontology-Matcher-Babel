@@ -61,18 +61,12 @@ public class StanfordLemmatizer {
 	 */
 	public List<String> lemmatize(String documentText) {
 		List<String> lemmas = new ArrayList<String>();
-    	// Create an empty Annotation just with the given text
-    	Annotation document = new Annotation(documentText);
-    	// run all Annotators on this text
-    	pipeline.annotate(document);
-    	// Iterate over all of the sentences found
-    	List<CoreMap> sentences = document.get(SentencesAnnotation.class);
+    	Annotation document = new Annotation(documentText);					// Create an empty Annotation just with the given text
+    	pipeline.annotate(document);										// run all Annotators on this text
+    	List<CoreMap> sentences = document.get(SentencesAnnotation.class);	// Iterate over all of the sentences found
     	for(CoreMap sentence: sentences) {
-        	// Iterate over all tokens in a sentence
-        	for (CoreLabel token: sentence.get(TokensAnnotation.class)) {
-            	// Retrieve and add the lemma for each word into the
-            	// list of lemmas
-            	lemmas.add(token.get(LemmaAnnotation.class));
+        	for (CoreLabel token: sentence.get(TokensAnnotation.class)) {	// Iterate over all tokens in a sentence
+            	lemmas.add(token.get(LemmaAnnotation.class));				// Retrieve and add the lemma for each word into the list of lemmas
         	}
     	}
     	return lemmas;
