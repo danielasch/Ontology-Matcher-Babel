@@ -154,7 +154,7 @@ public class ContextExtraction {
             }
         }
         for (Concept c : listCon) {
-            c.getContext().addAll(ontology_context);
+            c.getConceptContext().addAll(ontology_context);
         }
         finalLog();
         return listCon;

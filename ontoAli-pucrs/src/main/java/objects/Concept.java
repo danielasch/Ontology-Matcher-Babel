@@ -1,14 +1,11 @@
 package objects;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-import it.uniroma1.lcl.babelnet.BabelSynset;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 
-import edu.mit.jwi.item.ISynset;
 import resources.BabelNetResource;
 import resources.Utilities;
 
@@ -18,41 +15,27 @@ import resources.Utilities;
 public class Concept {
 
 //Attributes 	
-	
-	//OWLOntology
+
 	private OWLOntology ontology;
-	//OWLClass
 	private OWLClass owlClass;
-	//OWLOntology ID
 	private String ontologyID;
-	//OWLClass ID
 	private String classID;
-	//Ontology name
 	private String ontologyName;
-	//Class name
 	private String className;
-	//Concept annotation
-	private String desc;
-	//Concept context
-	private Set<String> context;					
-	// Auxiliary class to save the information about this concept 
-	//to generate the text out file.
+	private String conseptDesc;
+	private Set<String> conceptContext;
 	private Utilities ut;
 	private Object obj;
-	//Super concepts list
 	private List<OWLClassExpression> supers;
-	//Sub concepts list
 	private List<OWLClassExpression> subs;
-	//Synset disambiguated
 	private BabelNetResource.SearchObject goodSynset;
-	//OWLClass aligned to this concept
 	private OWLClass aliClass;
 
 
 //Constructor
 	
 	public Concept() {
-		this.context = new HashSet<String>();
+		this.conceptContext = new HashSet<String>();
 		this.goodSynset = null;
 		this.ut = null;
 	}
@@ -84,12 +67,12 @@ public class Concept {
 		return className;
 	}
 
-	public String getDesc() {
-		return desc;
+	public String getConseptDesc() {
+		return conseptDesc;
 	}
 
-	public Set<String> getContext() {
-		return context;
+	public Set<String> getConceptContext() {
+		return conceptContext;
 	}
 
     public Utilities getUtilities() {
@@ -141,12 +124,12 @@ public class Concept {
         className = _className;
     }
 
-    protected void setContext(Set<String> set) {
-        context = set;
+    protected void setConceptContext(Set<String> set) {
+        conceptContext = set;
     }
 
-    protected void setDesc(String _desc) {
-        desc = _desc;
+    protected void setConseptDesc(String _desc) {
+        conseptDesc = _desc;
     }
 
     protected void set_utilities(Utilities ut) {
@@ -180,11 +163,11 @@ public class Concept {
     public void printInfo() {
 		
 		System.out.println("Concept: " + this.className);
-		System.out.println("Description: " + this.desc);
+		System.out.println("Description: " + this.conseptDesc);
 
-		if(this.context != null) {
+		if(this.conceptContext != null) {
 			String out = "Context: ";
-			Iterator<String> iterator = this.context.iterator();
+			Iterator<String> iterator = this.conceptContext.iterator();
 			while(iterator.hasNext()) {
 				String a = iterator.next();
 				if(!iterator.hasNext()) {

@@ -53,7 +53,7 @@ public class DescriptionProcessing {
 			for(Concept concept: listCon) {
 				Set<String> context = new HashSet<String>();
 				//desc will receive the processed description of a concept
-				context = init(concept.getDesc());
+				context = init(concept.getConseptDesc());
 				//sets the description of a concept as the context
 				man.configContext(concept, context);
 			}

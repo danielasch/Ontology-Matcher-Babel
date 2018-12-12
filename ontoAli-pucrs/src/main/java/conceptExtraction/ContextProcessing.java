@@ -62,7 +62,7 @@ public class ContextProcessing {
 		ConceptManager cMan = new ConceptManager();
 		List<String> list = null;
 		Set<String> set = null;
-		list = token(cnp.getContext());
+		list = token(cnp.getConceptContext());
 		list = removal(list);
 		list = separate(list);
 		set = lemma(list);
@@ -235,9 +235,9 @@ public class ContextProcessing {
 
 		for(Concept concept: listCon) {
 			//System.out.println("@@" + concept.getClassName());
-			//System.out.println("@@" + concept.getContext());
+			//System.out.println("@@" + concept.getConceptContext());
 			//context will receive the processed context of a concept
-			Set<String> context = init(concept.getContext());
+			Set<String> context = init(concept.getConceptContext());
 			//sets the context of a concept
 			man.configContext(concept, context);
 		}

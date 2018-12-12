@@ -71,7 +71,7 @@ public class SynsetDisambiguation {
         Utilities ut = new Utilities();
         BabelNetResource.SearchObject bestSynset;
 
-        List<String> context = slem.toList(concept.getContext());
+        List<String> context = slem.toList(concept.getConceptContext());
         String name = man.getConceptName(concept);
 
         String lemmaName = slem.fullConceptName(name);
@@ -93,7 +93,7 @@ public class SynsetDisambiguation {
         if (searched.size() != 1) {
             bestSynset = leskTechnique(searched, context);
             man.configSynset(concept, bestSynset);
-            ut.setNumSy(searched.size()-1);
+            ut.setNumSy(searched.size());
 
         } else {
             BabelNetResource.SearchObject synset = searched.iterator().next();

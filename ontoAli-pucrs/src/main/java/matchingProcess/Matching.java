@@ -1,7 +1,4 @@
 package matchingProcess;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -9,7 +6,6 @@ import it.uniroma1.lcl.babelnet.BabelSynset;
 
 import objects.Concept;
 import objects.ConceptManager;
-import objects.Ontology;
 import resources.BabelNetResource;
 import resources.BaseResource;
 import resources.Utilities;
@@ -69,7 +65,7 @@ public class Matching {
 		for(Concept d : dom){
 			path.clear();
 			match_context.clear();
-			match_context.addAll(d.getContext());
+			match_context.addAll(d.getConceptContext());
 
 			int levels = 0;
 			int limit = 10;

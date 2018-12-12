@@ -4,7 +4,6 @@ package synsetSelection;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import fr.inrialpes.exmo.align.impl.Similarity;
 import objects.Concept;
 import objects.ConceptManager;
 import resources.BabelNetResource;
@@ -89,13 +88,13 @@ public class SynsetDisambiguationWE  {
 
 		public String toString(){
 		    int count = 1;
-		    String s =  "|Concept: " + this.originConcept.getClassName() + "\n";
+		    String s =  "|Conceito: " + this.originConcept.getClassName() + "\n";
 		    s +=        "|Synset: " + this.originSynset.getSynset().getMainSense() + "\n";
-		    s +=        "|Similarity: " + this.similarity + "\n";
-		    s +=        "\nPAIRS:\n";
+		    s +=        "|Similaridade: " + this.similarity + "\n";
+		    s +=        "\nPARES:\n";
 
 		    for(WordEmbbedingPair wePair : this.distributivePairs){
-		        s += "<PAIR " + count + "> " + wePair.conceptContextElement +
+		        s += "<PAR " + count + "> " + wePair.conceptContextElement +
                         " & " + wePair.synsetContextElement +
                         " -> " + wePair.modelSimilarity + "\n";
 		        count ++;
@@ -162,7 +161,7 @@ public class SynsetDisambiguationWE  {
 		List<WordEmbeddingObject> mapping = new ArrayList<>();
 		WordEmbeddingObject selected = null;
 
-		Set<String> context = slem.toSet(slem.toList(concept.getContext()));
+		Set<String> context = slem.toSet(slem.toList(concept.getConceptContext()));
 
 		String name = man.getConceptName(concept);
 		String lemmaName = slem.spConceptName(name);
@@ -201,6 +200,7 @@ public class SynsetDisambiguationWE  {
 			man.configSynset(concept, bestSynset);
 		}
 		ut.setSynsetCntx(searched);
+		ut.setNumSy(searched.size());
 		ut.setMappings(mapping);
 		ut.setBestPair(selected);
 		man.configUtilities(concept, ut);

@@ -51,10 +51,10 @@ public class OutFiles {
 				ut = cnp.getUtilities();
 				printer.print("\n>Ontology Info.<\n");
 				printer.print("Nome do conceito de domínio: " + cnp.getClassName() + "\n");
-				printer.print("Descrição: " + cnp.getDesc() + "\n");
+				printer.print("Descrição: " + cnp.getConseptDesc() + "\n");
 				printer.print("Supers: " + cnp.getSupers() + "\n");
 				printer.print("Subs: " + cnp.getSubs() + "\n");
-				printer.print("Contexto Domínio conceito: " + cnp.getContext() + "\n");
+				printer.print("Contexto Domínio conceito: " + cnp.getConceptContext() + "\n");
 				printer.print("Conceito Topo alinhado: ");
 
 				if(cnp.getAliClass() != null) {
@@ -70,15 +70,13 @@ public class OutFiles {
 				printer.print("Synset selecionado BabelNet: ");
 
 				if(cnp.getGoodSynset() != null) {
-					printer.print(cnp.getGoodSynset().getSynset().toString() + "\n");
+					printer.print(cnp.getGoodSynset().getSynset().getMainSense() + "\n");
 
-					if(cnp.getUtilities().getSelectedHypernym()!=null) {
+					if (cnp.getUtilities().getSelectedHypernym() != null) {
 						printer.print("Hiperonímio selecionado: " + ut.getSelectedHypernym() +
 								" no nível de busca " + ut.getLevel() + "\n");
 						printer.print("Caminho realizado: " + ut.getHypernyms() + "\n");
-					}
-
-					else{
+					} else {
 						printer.print("Hiperonímio selecionado: Não foi encontrado nenhum hiperonímio na ontologia de topo!\n");
 						printer.print("Caminho realizado: Nenhum caminho encontrado!\n");
 					}
@@ -87,41 +85,45 @@ public class OutFiles {
 					printer.print("Conjunto de synsets recuperados:\n");
 					Set<BabelNetResource.SearchObject> synsets = ut.getSynsetCntx();
 
-					int i = 1;
+					int count = 1;
 					for (BabelNetResource.SearchObject so : synsets) {
-						printer.print("\n"+i+")\n");
+						printer.print("\n" + count + ")\n");
 						printer.print(">Synset: " + so.getSynset() + "\n");
 						printer.print(">Sentidos: " + so.getSenses() + "\n");
 						printer.print(">Glosses: " + so.getGlosses() + "\n");
 						printer.print(">BOW: " + so.getBgw().toString() + "\n");
 						printer.print("\n");
-						i++;
+						count++;
 					}
 
 					printer.print("\n>Technique Info.<\n");
 
-					if(option == 1) {
-						printer.print("\n");
+					if (option == 1) {
+						printer.print("\tLESK TECHNIQUE\n");
 						bgwSelect = cnp.getGoodSynset().getBgw();
 						printer.print("Intersecção de palavras encontrada - LESK:");
 
 						for (String element : bgwSelect) {
 
-							if (cnp.getContext().contains(element)) {
+							if (cnp.getConceptContext().contains(element)) {
 								printer.print(" " + element + " ");
 							}
 						}
-					}
+					} else if (option == 2) {
+						printer.print("\tWORD EMBEDDING TECHNIQUE\n");
+						int index = 1;
 
-					else if (option == 2){
-
-						for(SynsetDisambiguationWE.WordEmbeddingObject weObj: ut.getMappings()){
-							printer.print(">Distributiva: ");
+						for (SynsetDisambiguationWE.WordEmbeddingObject weObj : ut.getMappings()) {
+							printer.print("\n" + index + ") Distributiva: \n");
 							printer.print(weObj.toString());
+							index++;
 						}
 					}
-					printer.print("\n-----------------------------------------------------------------------------------------------------\n");
-					printer.print("-------------------------------------------New concept-----------------------------------------------\n");
+
+					if (listDomain.indexOf(cnp) != listDomain.size() - 1) {
+						printer.print("\n-----------------------------------------------------------------------------------------------------\n");
+						printer.print("-------------------------------------------New concept-----------------------------------------------\n");
+					}
 				}
 
 				else{

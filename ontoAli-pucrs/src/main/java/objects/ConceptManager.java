@@ -40,11 +40,11 @@ public class ConceptManager {
     }
 
     public void configDescription(Concept cnp, String desc) {
-        cnp.setDesc(desc);
+        cnp.setConseptDesc(desc);
     }
 
     public void configContext(Concept cnp, Set<String> cntxt) {
-        cnp.setContext(cntxt);
+        cnp.setConceptContext(cntxt);
     }
 
     public void configSupers(Concept cnp, List<OWLClassExpression> supers) {
