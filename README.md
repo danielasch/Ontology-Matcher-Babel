@@ -5,9 +5,8 @@
 
 ## About this software
 
-  The Ontology Matcher Babel is a top-domain-level ontology matcher system based on [Daniela Schmidt's ontology matching
-repository.](https://github.com/danielasch/Ontology-Matcher) The alternative explored here uses [BabelNet] 
-(https://babelnet.org/) as main resource for the alignment process instead of [WordNet.](https://wordnet.princeton.edu/)  This tool uses SUMO and DOLCE top-level ontologies to be aligned with any domain ontology.
+The Ontology Matcher Babel is a top-domain-level ontology matcher system based on [Daniela Schmidt's ontology matching
+repository.](https://github.com/danielasch/Ontology-Matcher) The alternative explored here uses [BabelNet](https://babelnet.org/) as main resource for the alignment process instead of [WordNet.](https://wordnet.princeton.edu/)  This tool uses SUMO and DOLCE top-level ontologies to be aligned with any domain ontology.
  
 ## Minimum system requirements
   
@@ -50,13 +49,7 @@ repository.](https://github.com/danielasch/Ontology-Matcher) The alternative exp
 	
 ## Program requirements
 
-  To achieve great alignments and processes for your ontologies you must download
- some third-party resources such as BabelNet 4.0.1 indices (for offline processing 
- of big data using BabelNet) and the stanford GloVe algorithm (which obtains vector
- representation for words).  The reason why both of these resources are not included 
- in this software tool its because they're both too large for GitHub's repository 
- storage, and to obtain BabelNet indices you must belong to a research instituition, 
- so they cannot be distributed by the PLN group. 
+  To achieve great alignments and processes for your ontologies you must download some third-party resources such as BabelNet 4.0.1 indices (for offline processing of big data using BabelNet) and the stanford GloVe algorithm (which obtains vector representation for words).  The reason why both of these resources are not included in this software tool its because they're both too large for GitHub's repository storage, and to obtain BabelNet indices you must belong to a research instituition, so they cannot be distributed by the PLN group.
   ###If your profile fits to these requirements, you shall follow the next steps:
 
 
