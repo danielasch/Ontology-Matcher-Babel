@@ -1,19 +1,15 @@
 # Ontology-Matcher-Babel
 
   * This software is being developed by the NLP group at PUCRS.
-  * For more information, please check http://www.inf.pucrs.br/linatural/wordpress/.
+  * For more information, please check [our page!](http://www.inf.pucrs.br/linatural/wordpress/)
 
 ## About this software
 
   The Ontology Matcher Babel is a top-domain-level ontology matcher system
- based on https://github.com/danielasch/Ontology-Matcher. The alternative 
- explored here uses BabelNet as main resource for the alignment process
- instead of WordNet. This tool uses SUMO and DOLCE top-level ontologies to
+ based on [Daniela Schmidt's ontology matching repository.](https://github.com/danielasch/Ontology-Matcher) The alternative        
+ explored here uses [BabelNet](https://babelnet.org/) as main resource for the alignment
+ process instead of [WordNet.](https://wordnet.princeton.edu/) This tool uses SUMO and DOLCE top-level ontologies to
  be aligned with any domain ontology.
- 
-  For more information check the links below:
- * 1st https://wordnet.princeton.edu/, used at the cited repository (above).
- * 2nd https://babelnet.org/, used in this software tool.
  
 ## Minimum system requirements
   
@@ -30,7 +26,7 @@
 	* _e.g.: C:/Users/.../ontology.owl_
 
   * 2nd: .rdf alignment path (to be generated) [string]
-	* _e.g.: C:/Users/.../alignment.rdf_
+	* _e.g.: C:/Users/.../folder_containing_alignment_
 
   * 3rd: top ontology (dolce or sumo) [string]
 	* _e.g.: dolce_
@@ -53,3 +49,38 @@
 
   * 6th: reference alignment path (optional) [string]
   	* _e.g.: C:/Users/.../referenceAlign.rdf_
+	
+## Program requirements
+
+  To achieve great alignments and processes for your ontologies you must download
+ some third-party resources such as BabelNet 4.0.1 indices (for offline processing 
+ of big data using BabelNet) and the stanford GloVe algorithm (which obtains vector
+ representation for words).  The reason why both of these resources are not included 
+ in this software tool its because they're both too large for GitHub's repository 
+ storage, and to obtain BabelNet indices you must belong to a research instituition, 
+ so they cannot be distributed by the PLN group. 
+  ###If your profile fits to these requirements, you shall follow the next steps:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
