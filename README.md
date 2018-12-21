@@ -37,7 +37,7 @@ repository.](https://github.com/danielasch/Ontology-Matcher) The alternative exp
 	
   	###### Observation: If selected, the 2nd technique must use the notation _2:model_, where model = 'google' or 'glove' (_e.g.: 2:google_)
 
-  1. Context selecting (0 or 1) _e.g.: 0_
+  1. Context selection (0 or 1) _e.g.: 0_
 	
   	**Important**
 		0. Concept context for disambiguation (only)
