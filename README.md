@@ -52,14 +52,12 @@ repository.](https://github.com/danielasch/Ontology-Matcher) The alternative exp
   To achieve great alignments and processes for your ontologies you must download some third-party resources such as BabelNet 4.0.1 indices (for offline processing of big data using BabelNet) and the stanford GloVe algorithm (which obtains vector representation for words).  The reason why both of these resources are not included in this software tool its because they're both too large for GitHub's repository storage, and to obtain BabelNet indices you must belong to a research instituition, so they cannot be distributed by the PLN group. If your profile fits to these requirements, you shall follow the next steps:
   
   * GloVe
-  	1. Download [_'GloVe.6B.zip'_](nlp.stanford.edu/data/glove.6B.zip) pack of files and unzip it.
-	2. Enter into GloVe's unzipped directory and copy _'glove.6B.200d.txt'_ file. 
-  	3. Acess the root directory where your _'Ontology-Matcher-Babel'_ was cloned.
-  	4. Double click the _'ontoAli-pucrs'_ directory.
-	5. Open the resources folder and paste your _'glove.6B.200d.txt'_ file into it.
-	
-  * BabelNet indices
-  	1.
+  
+    1. Download [_'GloVe.6B.zip'_](nlp.stanford.edu/data/glove.6B.zip) pack of files and unzip it.
+    1. Enter into GloVe's unzipped directory and copy _'glove.6B.200d.txt'_ file. 
+    1. Acess the root directory where your _'Ontology-Matcher-Babel'_ was cloned.
+    1. Double click the _'ontoAli-pucrs'_ directory.
+    1. Open the resources folder and paste your _'glove.6B.200d.txt'_ file into it.
 
 
 
