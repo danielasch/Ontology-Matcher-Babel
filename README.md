@@ -5,11 +5,9 @@
 
 ## About this software
 
-  The Ontology Matcher Babel is a top-domain-level ontology matcher system
- based on [Daniela Schmidt's ontology matching repository.](https://github.com/danielasch/Ontology-Matcher) The alternative        
- explored here uses [BabelNet](https://babelnet.org/) as main resource for the alignment
- process instead of [WordNet.](https://wordnet.princeton.edu/) This tool uses SUMO and DOLCE top-level ontologies to
- be aligned with any domain ontology.
+  The Ontology Matcher Babel is a top-domain-level ontology matcher system based on [Daniela Schmidt's ontology matching
+repository.](https://github.com/danielasch/Ontology-Matcher) The alternative explored here uses [BabelNet] 
+(https://babelnet.org/) as main resource for the alignment process instead of [WordNet.](https://wordnet.princeton.edu/)  This tool uses SUMO and DOLCE top-level ontologies to be aligned with any domain ontology.
  
 ## Minimum system requirements
   
