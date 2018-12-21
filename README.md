@@ -23,33 +23,27 @@ repository.](https://github.com/danielasch/Ontology-Matcher) The alternative exp
 
 ## Program arguments:				       
  
-  1. Domain ontology path
-  	_e.g.: C:/Users/.../ontology.owl_
+  1. Domain ontology path  _e.g.: C:/Users/.../ontology.owl_
 
-  1. Rdf alignment path (to be generated)
-  	_e.g.: C:/Users/.../folder_containing_alignment_
+  1. Rdf alignment path (to be generated)  _e.g.: C:/Users/.../folder_containing_alignment_
 
-  1. Top ontology (dolce or sumo)
-  	_e.g.: dolce_
+  1. Top ontology (dolce or sumo)  _e.g.: dolce_
 
-  1. Alignment technique (1 or 2)
-  	_e.g.: 1_
+  1. Alignment technique (1 or 2)  _e.g.: 1_
+  
+  	**Important**
+		1. Context technique(LESK)
+		2. Word embedding technique
 	
-  **Important**
-	* 1:  Context technique(LESK)
-	* 2:  Word embedding technique
+  	###### Observation: If selected, the 2nd technique must use the notation _2:model_, where model = 'google' or 'glove' (_e.g.: 2:google_)
+
+  1. Context selecting (0 or 1) _e.g.: 0_
 	
-  ###### Observation: If selected, the 2nd technique must use the notation _2:model_, where model = 'google' or 'glove' (_e.g.: 2:google_)
+  	**Important**
+		0. Concept context for disambiguation (only)
+		1. Concept context + domain onyology context for disambiguation
 
-  1. Context selecting (0 or 1)
- 	_e.g.: 0_
-
-  **Important**
-	* 0:  Concept context for disambiguation (only)
-	* 1:  Concept context + domain onyology context for disambiguation
-
-  1. Reference alignment path (OPTIONAL)
-  	_e.g.: C:/Users/.../referenceAlign.rdf_
+  1. Reference alignment path (OPTIONAL) _e.g.: C:/Users/.../referenceAlign.rdf_
 
 
 ## Program requirements
