@@ -53,10 +53,10 @@ repository.](https://github.com/danielasch/Ontology-Matcher) The alternative exp
   
   * GloVe
   	1. Download [_'GloVe.6B.zip'_](nlp.stanford.edu/data/glove.6B.zip) pack of files and unzip it.
-	1. Enter into GloVe's unzipped directory and copy _'glove.6B.200d.txt'_ file. 
-  	1. Acess the root directory where your _'Ontology-Matcher-Babel'_ was cloned.
-  	1. Double click the _'ontoAli-pucrs'_ directory.
-	1. Open the resources folder and paste your _'glove.6B.200d.txt'_ file into it.
+	2. Enter into GloVe's unzipped directory and copy _'glove.6B.200d.txt'_ file. 
+  	3. Acess the root directory where your _'Ontology-Matcher-Babel'_ was cloned.
+  	4. Double click the _'ontoAli-pucrs'_ directory.
+	5. Open the resources folder and paste your _'glove.6B.200d.txt'_ file into it.
 	
   * BabelNet indices
   	1.
