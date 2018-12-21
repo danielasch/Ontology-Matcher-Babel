@@ -61,14 +61,11 @@ repository.](https://github.com/danielasch/Ontology-Matcher) The alternative exp
   
   * BabelNet indices
     - Open your local browser and access the [BabelNet's download page](https://babelnet.org/download) and follow its steps to obtain _'your_name_babelnet-4.0.zip'_ file and unzip it anywhere you want.
-    - You must download [WordNet](https://wordnet.princeton.edu/download/current-version) for using it as 'searchable' source. Unzip it as you wish.
     - To use your local indices you must enter the root directory where your _'Ontology-Matcher-Babel'_ was cloned.
     - Acess the _'ontoAli-pucrs'_ directory as well.
     - Enter into the _'config'_ folder and open the _'babelnet.var.properties'_ file.
     - Follow the configuration examples included inside it. Wen you're done, save and close this file.
-    - Now, at the same directory, open the _'jlt.var.properties'_ file.
-    - As you did before, follow the configuration examples inside it, save it and close it.
-
+    
   ###### If you do not belong to a researh instituition you can use BabelNet's RESTFul search service following [these steps](https://babelnet.org/guide#HowcanIdownloadtheBabelNetindices?). Keep in mind that it may affect the results of this software tool.
   
 # ENJOY!
