@@ -31,17 +31,17 @@ repository.](https://github.com/danielasch/Ontology-Matcher) The alternative exp
 
   1. Alignment technique (1 or 2)  _e.g.: 1_
   
-  	**Important**
-		1. Context technique(LESK)
-		2. Word embedding technique
+     * **Important**
+       1. Context technique(LESK)
+       2. Word embedding technique
 	
-  	###### Observation: If selected, the 2nd technique must use the notation _2:model_, where model = 'google' or 'glove' (_e.g.: 2:google_)
+       * Observation: If selected, the 2nd technique must use the notation _2:model_, where model = 'google' or 'glove' (_e.g.: 2:google_)
 
   1. Context selection (0 or 1) _e.g.: 0_
-	
-  	**Important**
-		0. Concept context for disambiguation (only)
-		1. Concept context + domain onyology context for disambiguation
+  
+     * **Important**
+       0. Concept context for disambiguation (only)
+       1. Concept context + domain onyology context for disambiguation
 
   1. Reference alignment path (OPTIONAL) _e.g.: C:/Users/.../referenceAlign.rdf_
 
