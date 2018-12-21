@@ -12,7 +12,7 @@ public class Utilities {
 //Attributes
 	
 	private Set<BabelNetResource.SearchObject> synsetCntxt;
-	private List<SynsetDisambiguationWE.WordEmbeddingObject> mappings;
+	private Set<SynsetDisambiguationWE.WordEmbeddingObject> mappings;
 	private SynsetDisambiguationWE.WordEmbeddingObject bestWePair;
 	private String hypernyms, selected_hypernym;
 	private int numSy, level;
@@ -41,7 +41,7 @@ public class Utilities {
 
     public int getLevel() { return level; }
 
-    public List<SynsetDisambiguationWE.WordEmbeddingObject> getMappings() { return mappings; }
+    public Set<SynsetDisambiguationWE.WordEmbeddingObject> getMappings() { return mappings; }
 
     public SynsetDisambiguationWE.WordEmbeddingObject getBestPair() { return bestWePair; }
 
@@ -60,7 +60,7 @@ public class Utilities {
 
     public void setLevel(int level) { this.level = level; }
 
-    public void setMappings(List<SynsetDisambiguationWE.WordEmbeddingObject> map) { this.mappings = map; }
+    public void setMappings(Set<SynsetDisambiguationWE.WordEmbeddingObject> map) { this.mappings = map; }
 
 	public void setBestPair(SynsetDisambiguationWE.WordEmbeddingObject weObj) { this.bestWePair = weObj; }
 

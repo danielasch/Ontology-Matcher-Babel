@@ -40,7 +40,7 @@ public class OutFiles {
 	 * Generates the text file for the parametrized technique
 	 */
 
-	public void outFile(List<Concept> listDomain, int option) {
+	public void outFile(List<Concept> listDomain, int tec) {
 		try {
 			FileWriter arq = new FileWriter(this.outPath);
 			PrintWriter printer = new PrintWriter(arq);
@@ -98,7 +98,7 @@ public class OutFiles {
 
 					printer.print("\n>Technique Info.<\n");
 
-					if (option == 1) {
+					if (tec == 1) {
 						printer.print("\tLESK TECHNIQUE\n");
 						bgwSelect = cnp.getGoodSynset().getBgw();
 						printer.print("Intersecção de palavras encontrada - LESK:");
@@ -109,7 +109,7 @@ public class OutFiles {
 								printer.print(" " + element + " ");
 							}
 						}
-					} else if (option == 2) {
+					} else if (tec == 2) {
 						printer.print("\tWORD EMBEDDING TECHNIQUE\n");
 						int index = 1;
 

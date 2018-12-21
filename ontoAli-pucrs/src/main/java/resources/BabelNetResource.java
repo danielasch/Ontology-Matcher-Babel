@@ -2,6 +2,7 @@ package resources;
 
 
 import com.babelscape.util.UniversalPOS;
+import edu.umd.cs.findbugs.annotations.NoWarning;
 import it.uniroma1.lcl.babelnet.*;
 import it.uniroma1.lcl.babelnet.data.BabelPointer;
 import it.uniroma1.lcl.jlt.util.Language;
@@ -74,7 +75,7 @@ public class BabelNetResource {
             return ">Search Object ( id - " + this.bs.getID() + "):\n" +
                     "\t| Nomenclature: " + this.bs.getMainSense() + "\n" +
                     "\t| Glosses: " + this.glosses + "\n" +
-                    "\t| Senses: " + this.getSenses();
+                    "\t| Senses: " + this.getSenses() + "\n";
         }
     }
 
@@ -171,7 +172,7 @@ public class BabelNetResource {
      */
 
     private SearchObject createSearchObject(BabelSynset bs, int order){
-        List<String> senses = lemmatizer(bs.getSenses(Language.EN), true);
+        List<String> senses = lemmatizer(bs.getMainSenses(Language.EN), true);
         List<String> glosses = lemmatizer(bs.getGlosses(Language.EN), false);
         SearchObject searchObject = new SearchObject(senses, glosses, bs, order);
         return searchObject;
@@ -233,8 +234,11 @@ public class BabelNetResource {
         List<String> lemma = new ArrayList<>();
         List<String> split;
         BabelSense sense;
+        int limitCounter = 0;
 
         for (Object e : elements) {
+
+            if(limitCounter > 20) break;
 
             if(type) {
                 sense = (BabelSense) e;
@@ -263,6 +267,7 @@ public class BabelNetResource {
             }
 
             lemma.addAll(split);
+            limitCounter++;
         }
 
         return lemmatize(lemma);
@@ -306,4 +311,5 @@ public class BabelNetResource {
         }
         return true;
     }
+
 }

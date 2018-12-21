@@ -16,28 +16,32 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
 import matchingProcess.RdfGenerator;
 import org.apache.commons.io.output.TeeOutputStream;
 
 import matchingProcess.Matching;
 import objects.Concept;
 import objects.Ontology;
+import org.slf4j.LoggerFactory;
 import resources.BaseResource;
 import resources.Evaluator;
 import resources.OutFiles;
-import synsetSelection.SynsetDisambiguation;
+import synsetSelection.SynsetDisambiguationLESK;
 import synsetSelection.SynsetDisambiguationWE;
 
 /**
  * Main class which instantiates and calls all necessary classes
  * to execute the matching process
  */
+
 public class Main {
 
 /**
  * Main method
  * arg 0 = path to the domain onto
- * arg 1 = path to out .rdf (match)
+ * arg 1 = path to out .rdf (matchLESK)
  * arg 2 = string selection for "dolce" or "sumo"
  * arg 3 = integer representing the technique to be used
  * 		OBS: if technique = 2 -> 2:model [model = google or glove]
@@ -48,22 +52,22 @@ public class Main {
 	/**
 	 * Selects the course of execution through argued preferences
 	 * */
-
 	public static void main(String[] args) {
 		long start = sTime();
 
+		Logger logger = ((Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME));
+		logger.setLevel(Level.ERROR);
+
 		verify(args);
 
-		String model = spModel(args);
-
-		int tec = Integer.parseInt(args[3]);
+		int tec = getTec(args);
 
 		switch(tec) {
 			case 1:
 				context(args);
 				break;
 			case 2:
-				wordEmbedding(args, model);
+				wordEmbedding(args);
 				break;
 			default:
 				errorMessageDeault();
@@ -81,20 +85,19 @@ public class Main {
 
 	private static void context(String[] args) {
 		String topOnto = args[2].toLowerCase();
-		int tec = Integer.parseInt(args[3]);
 		int context = Integer.parseInt(args[4]);
 		List<Concept> listDom;
 		List<Concept> listUp;
-
 		Ontology domain = new Ontology(args[0]);
+
 		switch(topOnto) {
 			case "dolce":
 				Ontology upperD = new Ontology("resources/DLP_397_Edited.owl");
 				listDom = domain(domain,context);
 				listUp = dolce(upperD);
 				disamb(listDom);
-				match(domain, upperD, args[1], listDom, listUp);
-				out(args[1], listDom, tec);
+				match(domain, upperD, args[1], listDom, listUp, args);
+				out(args[1], listDom, getTec(args));
 				evaluate(args);
 				break;
 			case "sumo":
@@ -102,8 +105,8 @@ public class Main {
 				listDom = domain(domain,context);
 				listUp = sumo(upperS);
 				disamb(listDom);
-				match(domain, upperS, args[1], listDom, listUp);
-				out(args[1], listDom, tec);
+				match(domain, upperS, args[1], listDom, listUp, args);
+				out(args[1], listDom, getTec(args));
 				evaluate(args);
 				break;
 			default:
@@ -120,31 +123,30 @@ public class Main {
 	 * contexts, selecting the greatest one
 	 */
 
-	private static void wordEmbedding(String[] args, String model) {
+	private static void wordEmbedding(String[] args) {
 		String topOnto = args[2].toLowerCase();
-		int tec = Integer.parseInt(args[3]);
 		int context = Integer.parseInt(args[4]);
 		List<Concept> listDom;
 		List<Concept> listUp;
-		
 		Ontology domain = new Ontology(args[0]);
+
 		switch(topOnto) {
 			case "dolce":
 				Ontology upperD = new Ontology("resources/DLP_397_Edited.owl");
 				listDom = domain(domain,context);
 				listUp = dolce(upperD);
-				disambWE(listDom, model);
-				match(domain, upperD, args[1], listDom, listUp);
-				out(args[1], listDom, tec);
+				disambWE(listDom, getModel(args));
+				match(domain, upperD, args[1], listDom, listUp, args);
+				out(args[1], listDom, getTec(args));
 				evaluate(args);
 				break;
 			case "sumo":
 				Ontology upperS = new Ontology("resources/sumo.owl");
 				listDom = domain(domain,context);
 				listUp = sumo(upperS);
-				disambWE(listDom, model);
-				match(domain, upperS, args[1], listDom, listUp);
-				out(args[1], listDom, tec);
+				disambWE(listDom,getModel(args));
+				match(domain, upperS, args[1], listDom, listUp, args);
+				out(args[1], listDom, getTec(args));
 				evaluate(args);
 				break;
 			default:
@@ -165,11 +167,13 @@ public class Main {
 		BaseResource base = new BaseResource();
 		ContextProcessing proc = new ContextProcessing(base);
 		proc.process(listDom);
-		SynsetDisambiguation disam = new SynsetDisambiguation(base);
+		SynsetDisambiguationLESK disam = new SynsetDisambiguationLESK(base);
 		disam.disambiguation(listDom);
 	}
 
+
 //WordNet technique related methods
+
 
 	private static void disambWE(List<Concept> listDom, String model) {
 		BaseResource base = new BaseResource(model);
@@ -227,11 +231,14 @@ public class Main {
 	/**
 	 * BabelNet matching through hypernym search method
 	 */
-	private static void match(Ontology dom, Ontology up, String outPath, List<Concept>listDom, List<Concept>listUp){
-		Matching match = new Matching();
+	private static void match(Ontology dom, Ontology up, String outPath, List<Concept>listDom, List<Concept>listUp, String[]args){
+		int tec = getTec(args);
 		RdfGenerator gen = new RdfGenerator(outPath);
 		gen.generateHeader(dom, up);
-		gen.mapEverything(match.matchBabel(listDom, listUp));
+		Matching match = null;
+		if (tec == 1) match = new Matching();
+		else if (tec == 2)  match = new Matching(getModel(args));
+		gen.mapEverything(match.matchBabel(listDom, listUp, tec));
 
 	}
 
@@ -252,9 +259,9 @@ public class Main {
 	 * Method that generates the .txt and .rdf files
 	 */
 
-	private static void out(String outPath, List<Concept> listDom, int option) {
+	private static void out(String outPath, List<Concept> listDom, int tec) {
 		OutFiles out = new OutFiles(outPath);
-		out.outFile(listDom, option);
+		out.outFile(listDom, tec);
 	}
 
 
@@ -346,15 +353,21 @@ public class Main {
 	//Other methods
 
 
-	private static String spModel(String[] args) {
+	private static String getModel(String[]args) {
 		if(args[3].contains(":")) {
 			int aux = args[3].indexOf(":");
 			String model = args[3].substring(aux+1);
-			args[3] = args[3].substring(0, aux);
 			return model;
-		} else {
-			return "";
 		}
+		return "";
+	}
+
+	private static int getTec(String[]args){
+		if(args[3].contains(":")) {
+			int aux = args[3].indexOf(":");
+			return Integer.parseInt(args[3].substring(0, aux));
+		}
+		return Integer.parseInt(args[3]);
 	}
 
 
@@ -377,16 +390,17 @@ public class Main {
 
 	private static void errorMessageDeault(){
 		System.out.println("Invalid arguments order, please try:\n" +
-				"1º) domain ontology path\n" +
-				"2º) out file path\n" +
-				"3º) top ontology selection [sumo or dolce]\n" +
-				"4º) technic selection [1, 2, 3, 4 or 5 - the numbers correspond to a certain technic]\n" +
-				"\t 1 - Overlapping\n" +
-				"\t 2 - WordEmbeddings\n" +
-				"\t 3 - Resnik\n" +
-				"\t 4 - Lin\n" +
-				"\t 5 - Wup\n" +
-				"5º) reference alignment path [optional]");
+				"1st) Domain ontology path\n" +
+				"2nd) Out file path\n" +
+				"3rd) Top ontology selection [sumo or dolce]\n" +
+				"4th) Technic selection [1 or 2- the numbers correspond to a certain technic]\n" +
+						"\t 1 - Overlapping [LESK]\n" +
+						"\t 2 - WordEmbeddings  [Word2Vector] - Notation 2:model, where model = google or glove\n" +
+				"5th) Usage of hole ontology context with the concept context\n" +
+						"\t 0 - No\n" +
+						"\t 1 - Yes\n" +
+				"6th) reference alignment path [optional]");
+
 	}
 				
 }

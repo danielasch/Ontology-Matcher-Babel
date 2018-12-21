@@ -52,7 +52,7 @@ public class SynsetDisambiguationWE  {
 	 * a synset called 'mapped pair'
 	*/
 
-	public class WordEmbeddingObject{
+	public class WordEmbeddingObject implements Comparable<WordEmbeddingObject>{
 
 	//Attributes
 
@@ -102,20 +102,27 @@ public class SynsetDisambiguationWE  {
 
 		    return s;
         }
+        @Override
+		public int compareTo(WordEmbeddingObject weObj){
+			if(this.similarity > weObj.similarity) return -1;
+			else if(this.similarity < weObj.similarity) return 1;
+			return 0;
+		}
 	}
 
 //Attributes
 
 	private BaseResource base;
 	private BabelNetResource bn;
+	private Set<WordEmbeddingObject> mapping;
 
 
 //Constructor	
 	
-	public SynsetDisambiguationWE(BaseResource _base) {
+	public SynsetDisambiguationWE(BaseResource base) {
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 		System.out.println(sdf.format(Calendar.getInstance().getTime()) + " - [log] - Synset didambiguation with Word embedding selected!" );
-		this.base = _base;
+		this.base = base;
 		this.bn = new BabelNetResource();
 	}
 
@@ -154,55 +161,59 @@ public class SynsetDisambiguationWE  {
      * concept context and a synset context
 	 *
 	 */
-	void bestSynset(Concept concept)  {
+	public void bestSynset(Concept concept)  {
 		StanfordLemmatizer slem = this.base.getLemmatizer();
 		ConceptManager man = new ConceptManager();
 		Utilities ut = new Utilities();
-		List<WordEmbeddingObject> mapping = new ArrayList<>();
-		WordEmbeddingObject selected = null;
-
-		Set<String> context = slem.toSet(slem.toList(concept.getConceptContext()));
 
 		String name = man.getConceptName(concept);
 		String lemmaName = slem.spConceptName(name);
 
-		BabelNetResource.SearchObject bestSynset = null;
         Set<BabelNetResource.SearchObject> searched = bn.search(lemmaName);
 
 		if(!searched.isEmpty()) {
-			double maxAverage = 0;
-
-			for (BabelNetResource.SearchObject synset : searched) {
-				double totalAverage = 0;
-				WordEmbeddingObject weObj = new WordEmbeddingObject(synset, concept);
-
-			    for(String cntxElement: context) {
-			    	double average = 0;
-
-			    	for(String bagElement: synset.getBgw()) {
-						double sim = this.base.getWord2Vec().getword2Vec().similarity(cntxElement, bagElement);
-						weObj.distributivePairs.add(new WordEmbbedingPair(cntxElement, bagElement, sim));
-
-                        if (!(Double.isNaN(sim))) average = average + sim * 10;
-					}
-			    	average = average / synset.getBgw().size();
-			    	totalAverage += average;
-			    }
-			    totalAverage = totalAverage / context.size();
-			    weObj.setSimilarity(totalAverage);
-			    mapping.add(weObj);
-
-				if(totalAverage> maxAverage) {
-			    	maxAverage = totalAverage;
-                    bestSynset = synset;
-			    }
-			}
-			man.configSynset(concept, bestSynset);
+			man.configSynset(concept, weTechnique(searched, concept, true));
 		}
 		ut.setSynsetCntx(searched);
 		ut.setNumSy(searched.size());
 		ut.setMappings(mapping);
-		ut.setBestPair(selected);
+		ut.setBestPair(mapping.iterator().next());
 		man.configUtilities(concept, ut);
+	}
+
+
+	public BabelNetResource.SearchObject weTechnique(Set<BabelNetResource.SearchObject> synsets, Concept concept, boolean useTreeSet){
+		double maxAverage = 0;
+		if(useTreeSet) this.mapping = new TreeSet<>();
+		BabelNetResource.SearchObject bestSynset = null;
+		Set<String> context = this.base.getLemmatizer().toSet(this.base.getLemmatizer().toList(concept.getConceptContext()));
+
+		for (BabelNetResource.SearchObject synset : synsets) {
+			double totalAverage = 0;
+			WordEmbeddingObject weObj = new WordEmbeddingObject(synset, concept);
+
+			for(String cntxElement: context) {
+				double average = 0;
+
+				for(String bagElement: synset.getBgw()) {
+					double sim = this.base.getWord2Vec().getword2Vec().similarity(cntxElement, bagElement);
+					weObj.distributivePairs.add(new WordEmbbedingPair(cntxElement, bagElement, sim));
+
+					if (!(Double.isNaN(sim))) average = average + sim * 10;
+				}
+				average = average / synset.getBgw().size();
+				totalAverage += average;
+			}
+			totalAverage = totalAverage / context.size();
+			weObj.setSimilarity(totalAverage);
+			if(useTreeSet) this.mapping.add(weObj);
+
+			if(totalAverage> maxAverage) {
+				maxAverage = totalAverage;
+				bestSynset = synset;
+			}
+		}
+
+		return bestSynset;
 	}
 }

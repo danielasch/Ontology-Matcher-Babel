@@ -9,13 +9,18 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * Class responsible for generating the .rdf file that concretely represents the alignment
+ * produced by this software tool
+ */
+
 public class RdfGenerator {
 
 
 //Attributes
 
-    private FileWriter fileWriter;
-    private PrintWriter printWriter;
+    private FileWriter fileWriter;      //Class necessary to realize the file writing
+    private PrintWriter printWriter;    //Class that also used to file write that contains some additional methods
 
 
 //Constructor
@@ -24,8 +29,9 @@ public class RdfGenerator {
         try {
             this.fileWriter = new FileWriter(localfile);
             this.printWriter = new PrintWriter(fileWriter);
-        }catch(IOException e) {
-            System.out.println("[ERROR]: Cannot operate over file out path!\n");
+        }
+        catch(IOException e) {
+            System.out.println("[ERROR]: Cannot operate over out file path!\n");
             e.printStackTrace();
         }
     }
@@ -43,8 +49,10 @@ public class RdfGenerator {
 
 
     /**
-     * Generates a rdf file header, which represents the
-     * alignment between two ontologies (in this case, different-level ontologies)
+     * This method generates a .rdf file header, which references the ontologies
+     * to be aligned (in this case, a pair of different-level ontologies)
+     * @param onto1 The first ontology of the matching process (commonly domain-level)
+     * @param onto2 The second ontology of the matching process (commonly top-level)
      */
 
     public void generateHeader(Ontology onto1, Ontology onto2) {
@@ -72,22 +80,29 @@ public class RdfGenerator {
 
 
     /**
-     * Turns the mapping class into a string
-     * to write it in the out rdf file
+     * Turns the mapping class into a string to write it in the out rdf file
+     * @param ontologyMapping A mapping class instance that represents the alignment of
+     * a pair of OWLClasses (concepts), one as the target (top-level) and the other as
+     * source (domain-level)
      */
 
-    private String generateMapping(Mapping m){
+    private String generateMapping(Mapping ontologyMapping){
         String out = "\t<map>\n" +
                 "\t\t<Cell>\n" +
-                "\t\t\t<entity1 rdf:resource='"+ m.getTarget() +"'/>\n" +
-                "\t\t\t<entity2 rdf:resource='"+ m.getSource() +"'/>\n" +
-                "\t\t\t<relation>" + m.getRelation() + "</relation>\n" +
-                "\t\t\t<measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>"+ m.getMeasure() +"</measure>\n" +
+                "\t\t\t<entity1 rdf:resource='"+ ontologyMapping.getTarget() +"'/>\n" +
+                "\t\t\t<entity2 rdf:resource='"+ ontologyMapping.getSource() +"'/>\n" +
+                "\t\t\t<relation>" + ontologyMapping.getRelation() + "</relation>\n" +
+                "\t\t\t<measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>"+ ontologyMapping.getMeasure() +"</measure>\n" +
                 "\t\t</Cell>\n" + "\t</map>\n";
         return out;
     }
 
-
+    /**
+     * This method generates in the .rdf out file every mapping found by
+     * the matching process in order to visualize all possible alignments
+     * between the two sets of concepts represented by a pair of different-level ontologies
+     * @param mappings A list of all possible matches, each of them built as a mapping instance
+     */
     public void mapEverything(List<Mapping>mappings){
         try {
             for (Mapping m : mappings) {

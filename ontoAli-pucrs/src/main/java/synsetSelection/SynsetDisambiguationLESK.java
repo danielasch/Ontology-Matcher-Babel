@@ -3,6 +3,7 @@ package synsetSelection;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import it.uniroma1.lcl.babelnet.BabelSynset;
 import objects.Concept;
 import objects.ConceptManager;
 import resources.BabelNetResource;
@@ -11,20 +12,22 @@ import resources.StanfordLemmatizer;
 import resources.Utilities;
 
 /**
- * This class disambiguate the recovered synsets for a concept
+ * This class disambiguate a list of recovered synsets for a
+ * specific concept which came from an argued ontology using
+ * LESK technique (overlapping over two sets)
  */
-public class SynsetDisambiguation {
+public class SynsetDisambiguationLESK {
 
 //Attributes
 
-    //BaseResource contains the necessary resources to execute the disambiguation
-    private BaseResource base;
-    private BabelNetResource bn;
+
+    private BaseResource base;      //Representation of common basic resources to realize the disambiguation and also other processes
+    private BabelNetResource bn;    //Representation of every common BabelNet related 'operation' used in many processes
 
 
 //Constructor
 
-    public SynsetDisambiguation(BaseResource _base) {
+    public SynsetDisambiguationLESK(BaseResource _base) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         System.out.println(sdf.format(Calendar.getInstance().getTime()) + " - [log] - Synset didambiguation selected!");
         this.base = _base;
@@ -48,7 +51,8 @@ public class SynsetDisambiguation {
 //Methods
 
     /**
-     * This method selects the right synset to a concept
+     * This method initiates the synset disambiguation over the ontology concepts
+     * @param listCon A list of first level concepts from the argued ontology
      */
     public void disambiguation(List<Concept> listCon) {
             initLog();
@@ -63,36 +67,21 @@ public class SynsetDisambiguation {
      * Lesk disambiguation process based on the overlapping between a concept context
      * and a synset context in order to select the greatest intersection value between
      * the generated distributive
+     * @param concept A concept to be related to a BabelSynset through the LESK technique
      */
 
     public void bestSynset(Concept concept) {
         StanfordLemmatizer slem = base.getLemmatizer();
         ConceptManager man = new ConceptManager();
         Utilities ut = new Utilities();
-        BabelNetResource.SearchObject bestSynset;
 
-        List<String> context = slem.toList(concept.getConceptContext());
         String name = man.getConceptName(concept);
 
         String lemmaName = slem.fullConceptName(name);
         Set<BabelNetResource.SearchObject> searched = bn.search(lemmaName);
 
-        System.out.println("\nConcept name: " + lemmaName + "\n");
-
-        if(searched.isEmpty()){
-            System.out.println("failed");
-            lemmaName = slem.spConceptName(name);
-            searched = bn.search(lemmaName);
-            System.out.println("\nConcept name: " + lemmaName + "\n");
-        }
-
-        if(!searched.isEmpty()) {
-            System.out.println("success");
-        }
-
         if (searched.size() != 1) {
-            bestSynset = leskTechnique(searched, context);
-            man.configSynset(concept, bestSynset);
+            man.configSynset(concept,leskTechnique(searched, concept));
             ut.setNumSy(searched.size());
 
         } else {
@@ -106,30 +95,40 @@ public class SynsetDisambiguation {
     }
 
 
-    public BabelNetResource.SearchObject leskTechnique(Set<BabelNetResource.SearchObject>context_1,
-                                                       List<String>context_2){
-        //System.out.println("\nEntering Lesk Technique\n");
+    /**
+     * Method responsible for overlap between two contexts, one representing the parametrized
+     * concept at 'bestSynset' and the other representing a BabelSynset recovered from a BabelNet
+     * search containing the nomenclature of the concept
+     * @param synsets A list of 'SearchObjects' of which each of them contains a recovered synset
+     * from a BabelNet search and its bag of words to be overlapped
+     * @param concept The concept to be attached to the 'best synset' found through the technique
+     * @return A single BabelSynset, that returned the greatest intersection value from the overlap,
+     * to be linked with a specific concept
+     */
+    public BabelNetResource.SearchObject leskTechnique(Set<BabelNetResource.SearchObject> synsets, Concept concept){
         BabelNetResource.SearchObject selected = null;
+        List<String> context = this.base.getLemmatizer().toList(concept.getConceptContext());
         int max = -1;
-        for(BabelNetResource.SearchObject so : context_1) {
-            //System.out.println(so.toString());
-            //System.out.println(">SearchObject " + so.getSynset().getMainSense() + " context: " + so.getBgw());
-            //System.out.println(">Ontology Context: " + context_2);
-            int test = intersection(so.getBgw(), context_2);
-            //System.out.println(">Intersection: " + test);
+
+        for(BabelNetResource.SearchObject so : synsets) {
+
+            int test = intersection(so.getBgw(), context);
+
             if (test > max) {
                 selected = so;
                 max = test;
             }
-            //System.out.println("\n");
         }
-        //System.out.println("\nExiting Lesk Technique\n");
+
         return selected;
     }
 
 
     /**
-     * Overlapping between two lists
+     * The concrete overlap between two contexts
+     * @param context The concept's context
+     * @param bagSynset A single synset's concept
+     * @return The intersection value
      */
     public int intersection(Set<String> bagSynset,List<String> context) {
         int inter = 0;

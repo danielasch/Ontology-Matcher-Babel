@@ -192,7 +192,7 @@ public class StanfordLemmatizer {
 		} else {
 			name = cnpName;
 		}
-		return name;
+		return name.toLowerCase();
 	}
 
 	/**
@@ -201,11 +201,16 @@ public class StanfordLemmatizer {
 	 */
 
 	public String fullConceptName(String conceptName){
-		String name = conceptName;
+		String name = (conceptName.charAt(0) + "").toLowerCase();
+		name += conceptName.substring(1);
+		if(name.charAt(name.length()-1) == ' ') name = name.substring(0, name.length()-2);
+
 		if(hasUpperCase(name)){
+
 			int first = 0;
 			int last = 0;
 			List<String> words = new ArrayList<>();
+
 			for(char c : name.toCharArray()){
 				if(Character.isUpperCase(c)){
 					if(first != last) {
@@ -218,17 +223,16 @@ public class StanfordLemmatizer {
 			if(first != name.length()) words.add(name.substring(first,last));
 			String ans = "";
 			for(String s: words){
-				ans += s + " ";
+				if(words.indexOf(s) == words.size()-1) ans += s;
+				else ans += s + "_";
 			}
-			return ans;
+			return ans.toLowerCase();
 		}
-		else{
-			name.replaceAll("_", " ");
-			name.replaceAll("-", " ");
-			name.replaceAll("_", " ");
-			name.replaceAll("-", " ");
-		}
-		return name;
+
+		name = name.replaceAll("-", "_");
+		name = name.replaceAll(" ", "_");
+
+		return name.toLowerCase();
 	}
 
 	/**
@@ -245,7 +249,5 @@ public class StanfordLemmatizer {
 		}
 		return false;
 	}
-
-
 
 }

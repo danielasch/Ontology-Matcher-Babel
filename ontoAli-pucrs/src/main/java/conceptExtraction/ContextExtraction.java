@@ -169,8 +169,6 @@ public class ContextExtraction {
         List<Concept> listCon = new ArrayList<Concept>();
         ConceptManager man = new ConceptManager();
 
-        System.out.println("Upper Ontology: ");
-
         for (OWLClass owlClass : onto.getClassesInSignature()) {
             //instantiate the Concept class
             Concept concept = new Concept();
