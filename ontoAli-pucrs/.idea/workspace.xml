@@ -2,20 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4ddb91f1-af43-4b9d-9a96-4f037d15d922" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/babelnet.var.properties" beforeDir="false" afterPath="$PROJECT_DIR$/config/babelnet.var.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/jlt.var.properties" beforeDir="false" afterPath="$PROJECT_DIR$/config/jlt.var.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/conceptExtraction/ContextExtraction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/conceptExtraction/ContextExtraction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/conceptExtraction/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/conceptExtraction/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/matchingProcess/Matching.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/matchingProcess/Matching.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/matchingProcess/RdfGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/matchingProcess/RdfGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/resources/BabelNetResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/BabelNetResource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/resources/OutFiles.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/OutFiles.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/resources/StanfordLemmatizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/StanfordLemmatizer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/resources/Utilities.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/resources/Utilities.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/synsetSelection/SynsetDisambiguation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/synsetSelection/SynsetDisambiguationLESK.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/synsetSelection/SynsetDisambiguationWE.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/synsetSelection/SynsetDisambiguationWE.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -40,11 +27,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/conceptExtraction/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-4456">
-              <caret line="84" selection-start-line="84" selection-end-line="84" />
+            <state relative-caret-position="-480">
+              <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -52,32 +39,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/resources/Word2Vector.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
+            <state relative-caret-position="405">
               <caret line="32" selection-start-line="32" selection-end-line="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/matchingProcess/Matching.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="435">
-              <caret line="41" selection-start-line="41" selection-end-line="41" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/matchingProcess/RdfGenerator.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="184">
-              <caret line="27" column="20" selection-start-line="27" selection-start-column="20" selection-end-line="27" selection-end-column="20" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -133,7 +99,7 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="67" />
     <option name="y" value="25" />
     <option name="width" value="650" />
@@ -262,16 +228,18 @@
       <workItem from="1545318004403" duration="13239000" />
       <workItem from="1545407780321" duration="1752000" />
       <workItem from="1545419948584" duration="1324000" />
+      <workItem from="1547201437188" duration="775000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="110838000" />
+    <option name="totallyTimeSpent" value="111613000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="67" y="25" width="1299" height="743" extended-state="6" />
+    <frame x="67" y="25" width="1299" height="743" extended-state="7" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2529928" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25698325" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -497,20 +465,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/matchingProcess/RdfGenerator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
+        <state relative-caret-position="-982">
           <caret line="27" column="20" selection-start-line="27" selection-start-column="20" selection-end-line="27" selection-end-column="20" />
           <folding>
             <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/conceptExtraction/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4456">
-          <caret line="84" selection-start-line="84" selection-end-line="84" />
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -524,8 +482,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/resources/Word2Vector.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
+        <state relative-caret-position="405">
           <caret line="32" selection-start-line="32" selection-end-line="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/conceptExtraction/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-480">
+          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

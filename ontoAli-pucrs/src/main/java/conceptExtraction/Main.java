@@ -1,12 +1,8 @@
 /****************************************************
-*	Top-match is a tool to align top and domain     *
+*	ontoAli-pucrs is a tool to align top and domain *
 * ontologies using BabelNet.                        *
-*****************************************************
-* 	This is the main class that calls specialized   *
-* classes to generate the alignment.                *
-*                                                   *
-*                                                   *
-* @authors Henrique Kops & Rafael Basso              *
+*													*
+* @authors Henrique Kops & Rafael Basso             *
 ****************************************************/
 package conceptExtraction;
 
@@ -32,8 +28,8 @@ import synsetSelection.SynsetDisambiguationLESK;
 import synsetSelection.SynsetDisambiguationWE;
 
 /**
- * Main class which instantiates and calls all necessary classes
- * to execute the matching process
+ * This is the main class that calls specialized
+ * classes to generate the alignment.
  */
 
 public class Main {
