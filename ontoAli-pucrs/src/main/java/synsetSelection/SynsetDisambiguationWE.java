@@ -17,17 +17,18 @@ import resources.Utilities;
 public class SynsetDisambiguationWE  {
 
     /**
-     * Object to represent the similarity between a pair of elements,
-     * one from a concept context and the other from a synset context
+     * Object that represents the similarity between a pair of elements,
+     * one from a concept context and the other from a synset context,
+	 * used at the word embedding distributive between both contexts
      */
 
     private class WordEmbbedingPair{
 
     //Attributes
 
-        private String synsetContextElement;
-        private String conceptContextElement;
-        private Double modelSimilarity;
+        private String synsetContextElement;	//A token present at the context of a specific synset (we distributive)
+        private String conceptContextElement;	//A token present at the context of a specific concept (we distributive)
+        private Double modelSimilarity;			//The similarity between the pair of tokens above, retrieved by the w2v model
 
     //Constructor
 
@@ -49,17 +50,19 @@ public class SynsetDisambiguationWE  {
 
 	/**
 	 * Object to represent the similarity between a concept and
-	 * a synset called 'mapped pair'
+	 * a synset called 'mapped pair', which will be compared with other
+	 * mapped pairs in order to find the 'best' mapped pair to be used
+	 * at the alignment phase
 	*/
 
 	public class WordEmbeddingObject implements Comparable<WordEmbeddingObject>{
 
 	//Attributes
 
-		private BabelNetResource.SearchObject originSynset;
-		private Concept originConcept;
-		private Double similarity;
-		private Set<WordEmbbedingPair> distributivePairs;
+		private BabelNetResource.SearchObject originSynset;	//The synset that contains the necessary 'synset context' to be used at the we distributive
+		private Concept originConcept;						//The concept that contains the necessary 'concept context' to be used at the we distributive
+		private Double similarity;							//The final similarity encountered for this pair (considering all 'intermediate' wordEmbeddingPairs)
+		private Set<WordEmbbedingPair> distributivePairs;	//The set containing all pairs resultant from both contexts distributed
 
 	//Constructor
 
@@ -70,7 +73,6 @@ public class SynsetDisambiguationWE  {
 		}
 
 	//Getters
-
 
 		public Double getSimilarity() { return similarity; }
 
@@ -112,9 +114,9 @@ public class SynsetDisambiguationWE  {
 
 //Attributes
 
-	private BaseResource base;
-	private BabelNetResource bn;
-	private Set<WordEmbeddingObject> mapping;
+	private BaseResource base;					//Base resources
+	private BabelNetResource bn;				//Babel net related resources and actions
+	private Set<WordEmbeddingObject> mapping;	//A set containing all mapped pairs
 
 
 //Constructor	
@@ -147,6 +149,7 @@ public class SynsetDisambiguationWE  {
 	 * This method selects the right synset for all concepts
      * which came from a certain domain-level ontology
      */
+
 	public void disambiguation(List<Concept> listCon) {
 		initLog();
 		for (Concept concept : listCon) {
@@ -157,10 +160,11 @@ public class SynsetDisambiguationWE  {
 
 
 	/**
-	 * Word embeddings disambiguation process based on the average cossine distance between a
-     * concept context and a synset context
-	 *
+	 * Method responsible for initiating and finishing the disambiguation process
+	 * through we technique for a single concept (which will be related
+	 * to a single synset)
 	 */
+
 	public void bestSynset(Concept concept)  {
 		StanfordLemmatizer slem = this.base.getLemmatizer();
 		ConceptManager man = new ConceptManager();
@@ -181,6 +185,10 @@ public class SynsetDisambiguationWE  {
 		man.configUtilities(concept, ut);
 	}
 
+	/**
+	 * Word embeddings disambiguation process based on the average
+	 * cosine distance between aconcept context and a synset context
+	 */
 
 	public BabelNetResource.SearchObject weTechnique(Set<BabelNetResource.SearchObject> synsets, Concept concept, boolean useTreeSet){
 		double maxAverage = 0;

@@ -17,9 +17,10 @@ public class Evaluator {
 	
 //Attributes
 	
-	String referenceAlignment;
-	String alignment;
-	PRecEvaluator evaluator;
+	String referenceAlignment;		//String representing the path to the reference alignment
+	String alignment;				//String representing the path to the generated alignment
+	PRecEvaluator evaluator;		//Special class that evaluates the condition of an alignment (.rdf file)
+									// based on another
 
 
 //Constructor

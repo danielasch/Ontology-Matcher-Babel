@@ -156,7 +156,7 @@ public class Main {
 
 
 	/**
-	 * Context disambiguation method
+	 * Method responsible for the start of the context disambiguation
 	 */
 
 	private static void disamb(List<Concept> listDom) {
@@ -168,8 +168,11 @@ public class Main {
 	}
 
 
-//WordNet technique related methods
+//WordEmbedding technique related methods
 
+	/**
+	 * Method responsible for the start of the WE disambiguation
+	 */
 
 	private static void disambWE(List<Concept> listDom, String model) {
 		BaseResource base = new BaseResource(model);
@@ -263,12 +266,17 @@ public class Main {
 
 	//Time related methods
 
-
+	/**
+	 * Start execution time
+	 */
 	private static long sTime() {
 		long start = System.nanoTime();
 		return start;
 	}
-	
+
+	/**
+	 * Execution time
+	 */
 	private static void fTime(long start) {
 		long end = System.nanoTime();
 		end = end - start;
@@ -276,6 +284,10 @@ public class Main {
 		
 		minute(end);
 	}
+
+	/**
+	 * Transforms the fTime measure into minutes
+	 */
 	private static void minute(long time) {
 		int aux = 0;
 		long sec = 0;
@@ -318,7 +330,10 @@ public class Main {
 		}
 		args[1] = verifyRdf(args);
 	}
-	
+
+	/**
+	 * Result files nomenclature manager
+	 */
 	private static String verifyRdf(String[] args) {
 		String outFile = args[1];
 		String outFileLog = args[1];
@@ -341,14 +356,16 @@ public class Main {
 			outFileLog = outFileLog.concat(".txt");
 		}
 		
-		outputStream(outFileLog);	//LOG PATH + FILE NAME
-		return outFile; 	//RDF PATH + FILE NAME
+		outputStream(outFileLog);								//LOG PATH + FILE NAME
+		return outFile; 										//RDF PATH + FILE NAME
 	}
 
 
 	//Other methods
 
-
+	/**
+	 * Gets only the model (if it exists -> when technique 2 is selected)
+	 */
 	private static String getModel(String[]args) {
 		if(args[3].contains(":")) {
 			int aux = args[3].indexOf(":");
@@ -358,6 +375,9 @@ public class Main {
 		return "";
 	}
 
+	/**
+	 * This method gets only the technique argued
+	 */
 	private static int getTec(String[]args){
 		if(args[3].contains(":")) {
 			int aux = args[3].indexOf(":");
@@ -366,7 +386,9 @@ public class Main {
 		return Integer.parseInt(args[3]);
 	}
 
-
+	/**
+	 * Output streams manager
+	 */
 	private static void outputStream(String outFileLog) {
 		try {
 			FileOutputStream fos = new FileOutputStream(outFileLog);
@@ -383,7 +405,9 @@ public class Main {
 		}
 	}
 
-
+	/**
+	 * Error message thrown when wrong parameters are detected
+	 */
 	private static void errorMessageDeault(){
 		System.out.println("Invalid arguments order, please try:\n" +
 				"1st) Domain ontology path\n" +

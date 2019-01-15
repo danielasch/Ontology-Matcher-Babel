@@ -16,20 +16,19 @@ public class Concept {
 
 //Attributes 	
 
-	private OWLOntology ontology;
-	private OWLClass owlClass;
-	private String ontologyID;
-	private String classID;
-	private String ontologyName;
-	private String className;
-	private String conseptDesc;
-	private Set<String> conceptContext;
-	private Utilities ut;
-	private Object obj;
-	private List<OWLClassExpression> supers;
-	private List<OWLClassExpression> subs;
-	private BabelNetResource.SearchObject goodSynset;
-	private OWLClass aliClass;
+	private OWLOntology ontology;						//The ontology that contains the current concept
+	private OWLClass owlClass;							//OWLClass related to this concept
+	private String ontologyID;							//ID of the current OWLOntology
+	private String classID;								//ID of the current OWLClass
+	private String ontologyName;						//The name of the current OWLOntology
+	private String className;							//The name of the current OWLClass
+	private String conceptDesc;							//Current concept's description
+	private Set<String> conceptContext;					//Current concept's context
+	private Utilities ut;								//Utilities package related to this concept
+	private List<OWLClassExpression> supers;			//List of 'more generic' concepts than this concept
+	private List<OWLClassExpression> subs;				//List of 'more specific' concepts than this concept
+	private BabelNetResource.SearchObject goodSynset;	//The disambiguated synset that best represents this concept
+	private OWLClass aliClass;							//The top-level concept aligned to this concept
 
 
 //Constructor
@@ -67,8 +66,8 @@ public class Concept {
 		return className;
 	}
 
-	public String getConseptDesc() {
-		return conseptDesc;
+	public String getConceptDesc() {
+		return conceptDesc;
 	}
 
 	public Set<String> getConceptContext() {
@@ -95,16 +94,12 @@ public class Concept {
         return aliClass;
     }
 
-    public Object getObject() {
-        return obj;
-    } //this changed to used instead of unused when i've refactored it <<<
-
 
 //Setters
 
     protected void setOwlOntology(OWLOntology onto) {
         this.ontology = onto;
-    } //HERE
+    }
 
     protected void setOwlClass(OWLClass owlclass) { owlClass = owlclass; }
 
@@ -128,8 +123,8 @@ public class Concept {
         conceptContext = set;
     }
 
-    protected void setConseptDesc(String _desc) {
-        conseptDesc = _desc;
+    protected void setConceptDesc(String _desc) {
+        conceptDesc = _desc;
     }
 
     protected void set_utilities(Utilities ut) {
@@ -150,20 +145,17 @@ public class Concept {
 		aliClass = _aliclass;
 	}
 
-	void setObject(Object _obj) {
-		obj = _obj;
-	}
-
 
 //Methods
 
     /**
-    *Prints the concept's information
+    *Prints some important concept information
     */
+
     public void printInfo() {
 		
 		System.out.println("Concept: " + this.className);
-		System.out.println("Description: " + this.conseptDesc);
+		System.out.println("Description: " + this.conceptDesc);
 
 		if(this.conceptContext != null) {
 			String out = "Context: ";

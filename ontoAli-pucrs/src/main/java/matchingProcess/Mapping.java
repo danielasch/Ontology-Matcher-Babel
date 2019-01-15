@@ -1,21 +1,17 @@
 package matchingProcess;
 
 /**
- * This class maps the alignment between domain ontology classes
- * and top ontology classes
+ * This class 'maps' (as a guideline) the alignment
+ * between domain-level ontology classes and top-level ontology classes
  */
 public class Mapping {
 	
 //Attributes
-	
-	//source entity
-	private String source;
-	//target entity
-	private String target;
-	//relation between source and target
-	private String relation;
-	//trust measure
-	private String measure;
+
+	private String source;		//Alignment's source entity (domain-level concept)
+	private String target;		//Alignment's target entity (top-level concept)
+	private String relation;	//The relation between both source and target
+	private String measure;		//Trust measure
 
 
 //Getters

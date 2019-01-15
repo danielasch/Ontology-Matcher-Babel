@@ -24,8 +24,8 @@ public class StanfordLemmatizer {
 	
 //Attributes
 	
-	protected StanfordCoreNLP pipeline;
-	private List<String> stopWords;
+	protected StanfordCoreNLP pipeline;		//A pipeline for the lemmatizer
+	private List<String> stopWords;			//A list containing strings that have less important meaning
 
 
 //Constructor
@@ -57,12 +57,12 @@ public class StanfordLemmatizer {
 //Methods
 	
 	/**
-	 * This method lemmatize a String
+	 * This method lemmatizes a String
 	 */
 	public List<String> lemmatize(String documentText) {
 		List<String> lemmas = new ArrayList<String>();
     	Annotation document = new Annotation(documentText);					// Create an empty Annotation just with the given text
-    	pipeline.annotate(document);										// run all Annotators on this text
+    	pipeline.annotate(document);										// Run all Annotators on this text
     	List<CoreMap> sentences = document.get(SentencesAnnotation.class);	// Iterate over all of the sentences found
     	for(CoreMap sentence: sentences) {
         	for (CoreLabel token: sentence.get(TokensAnnotation.class)) {	// Iterate over all tokens in a sentence

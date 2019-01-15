@@ -16,13 +16,10 @@ import java.util.List;
 public class BaseResource {
 
 //Attributes
-	
-	//Stop words list
-	private List<String> stpWords = new ArrayList<String>();
-	//Lemmatizer resource
-	private StanfordLemmatizer slem;
-	//Word2Vector resource
-	private Word2Vector w2v;
+
+	private List<String> stpWords = new ArrayList<String>();		//A list of strings that represents the stop words
+	private StanfordLemmatizer slem;						//Lemmatizer resource
+	private Word2Vector w2v;								//Word2Vector resource
 
 
 //Constructors
@@ -82,7 +79,7 @@ public class BaseResource {
 //Methods
 
 	/**
-	 * This method read the stopwords2.text file, 
+	 * This method reads the stopwords2.text file
 	 * and put the lines into a list
 	 */
 	private void rdStpWords() {

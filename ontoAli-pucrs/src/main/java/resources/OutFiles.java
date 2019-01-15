@@ -17,7 +17,7 @@ public class OutFiles {
 	
 //Attributes
 	
-	private String outPath;
+	private String outPath;		//The path that the result files shall be created
 
 
 //Constructor	
@@ -51,7 +51,7 @@ public class OutFiles {
 				ut = cnp.getUtilities();
 				printer.print("\n>Ontology Info.<\n");
 				printer.print("Nome do conceito de domínio: " + cnp.getClassName() + "\n");
-				printer.print("Descrição: " + cnp.getConseptDesc() + "\n");
+				printer.print("Descrição: " + cnp.getConceptDesc() + "\n");
 				printer.print("Supers: " + cnp.getSupers() + "\n");
 				printer.print("Subs: " + cnp.getSubs() + "\n");
 				printer.print("Contexto Domínio conceito: " + cnp.getConceptContext() + "\n");
@@ -83,7 +83,7 @@ public class OutFiles {
 
 					printer.print("Número de Synsets recuperados: " + ut.getNumSy() + "\n\n");
 					printer.print("Conjunto de synsets recuperados:\n");
-					Set<BabelNetResource.SearchObject> synsets = ut.getSynsetCntx();
+					Set<BabelNetResource.SearchObject> synsets = ut.getDisambiguatedSynsets();
 
 					int count = 1;
 					for (BabelNetResource.SearchObject so : synsets) {

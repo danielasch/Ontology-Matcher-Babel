@@ -11,17 +11,17 @@ public class Utilities {
 
 //Attributes
 	
-	private Set<BabelNetResource.SearchObject> synsetCntxt;
-	private Set<SynsetDisambiguationWE.WordEmbeddingObject> mappings;
-	private SynsetDisambiguationWE.WordEmbeddingObject bestWePair;
-	private String hypernyms, selected_hypernym;
-	private int numSy, level;
+	private Set<BabelNetResource.SearchObject> disambiguatedSynsets;	//All the successfully disambiguated (LESK) synsets related to a concept
+	private Set<SynsetDisambiguationWE.WordEmbeddingObject> mappings;	//All the successfully disambiguated (WE) synsets related to a concept
+	private SynsetDisambiguationWE.WordEmbeddingObject bestWePair;		//The best pair (concept-synset) found through WE
+	private String hypernyms, selected_hypernym;						//The path-to-top-ontology of hypernyms found and the hypernym that matched with a top-level concept
+	private int numSy, level;											//The synset and alignment level counters
 
 
 //Constructor	
 	
 	public Utilities() {
-		this.synsetCntxt = null;
+		this.disambiguatedSynsets = null;
 		this.numSy = level = 0;
 
 	}
@@ -29,7 +29,7 @@ public class Utilities {
 
 //Getters
 
-    public Set<BabelNetResource.SearchObject> getSynsetCntx() { return synsetCntxt; }
+    public Set<BabelNetResource.SearchObject> getDisambiguatedSynsets() { return disambiguatedSynsets; }
 
 	public int getNumSy() {
 		return numSy;
@@ -48,7 +48,7 @@ public class Utilities {
 
 //Setters
 
-    public void setSynsetCntx(Set<BabelNetResource.SearchObject> synsetCntxt){ this.synsetCntxt = synsetCntxt; }
+    public void setSynsetCntx(Set<BabelNetResource.SearchObject> synsetCntxt){ this.disambiguatedSynsets = synsetCntxt; }
 
     public void setNumSy(int num) {
         this.numSy = num;

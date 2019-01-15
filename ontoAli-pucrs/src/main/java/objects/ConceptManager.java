@@ -19,7 +19,7 @@ public class ConceptManager {
 
     /**
      * These methods calls protected methods from the Concept class,
-     * permitting this class to manage the internal of a concept
+     * permitting this class to manage the internal attributes of a concept
      */
     public String getConceptName(Concept cnp) { return cnp.getClassName(); }
 
@@ -40,7 +40,7 @@ public class ConceptManager {
     }
 
     public void configDescription(Concept cnp, String desc) {
-        cnp.setConseptDesc(desc);
+        cnp.setConceptDesc(desc);
     }
 
     public void configContext(Concept cnp, Set<String> cntxt) {
@@ -67,7 +67,4 @@ public class ConceptManager {
         cnp.set_utilities(ut);
     }
 
-    public void configObject(Concept cnp, Object obj) {
-        cnp.setObject(obj);
-    }
 }
