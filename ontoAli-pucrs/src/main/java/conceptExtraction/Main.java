@@ -80,11 +80,12 @@ public class Main {
 	 */
 
 	private static void context(String[] args) {
+		Ontology domain = new Ontology(args[0]);
 		String topOnto = args[2].toLowerCase();
 		int context = Integer.parseInt(args[4]);
+
 		List<Concept> listDom;
 		List<Concept> listUp;
-		Ontology domain = new Ontology(args[0]);
 
 		switch(topOnto) {
 			case "dolce":
@@ -120,11 +121,12 @@ public class Main {
 	 */
 
 	private static void wordEmbedding(String[] args) {
+		Ontology domain = new Ontology(args[0]);
 		String topOnto = args[2].toLowerCase();
 		int context = Integer.parseInt(args[4]);
+
 		List<Concept> listDom;
 		List<Concept> listUp;
-		Ontology domain = new Ontology(args[0]);
 
 		switch(topOnto) {
 			case "dolce":

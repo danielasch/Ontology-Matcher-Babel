@@ -20,8 +20,7 @@ public class ContextProcessing {
 
 //Attributes
 
-	//BaseResource contains the necessary resources to execute the context process
-	private BaseResource base;
+	private BaseResource base;		//BaseResource contains the necessary resources to execute the context process
 
 
 //Constructor
@@ -46,71 +45,86 @@ public class ContextProcessing {
 
 
 //Methods
-	
+
+	/**
+	 * Initiating the context processing
+	 */
 	protected void procWE(List<Concept> listUp) {
 		init_log();
 		
 		for(Concept cnp: listUp) {
-			start(cnp);
+			processManager(cnp);
 		}
 		
 		final_log();
 	}
 
-
-	private void start(Concept cnp) {
+	/**
+	 * Manager of the description processing
+	 */
+	private void processManager(Concept cnp) {
 		ConceptManager cMan = new ConceptManager();
-		List<String> list = null;
-		Set<String> set = null;
-		list = token(cnp.getConceptContext());
-		list = removal(list);
-		list = separate(list);
-		set = lemma(list);
-		set = number(set);
+		List<String> list;
+		Set<String> set;
+		list = contextTokenizerManager(cnp.getConceptContext());
+		list = contextRmStopWords(list);
+		list = separateElementsByHashtag(list);
+		set = cleanSet(list);
+		set = addWithoutNumbers(set);
 		cMan.configContext(cnp, set);
 	}
 
-	
-	private List<String> token(Set<String> ctx) {
+	/**
+	 * Manage the tokenizing of a parametrized concept
+	 */
+	private List<String> contextTokenizerManager(Set<String> ctx) {
 		List<String> list = new ArrayList<>();
 		List<String> aux = new ArrayList<>();
-		for(String el: ctx) {
-			tokenize(el, " ", aux);
-		}
-		
-		for(String el: aux) {
-			tokenize(el, "\n", list);
-		}
+
+		for(String el: ctx) { contextTokenizer(el, " ", aux); }
+
+		for(String el: aux) { contextTokenizer(el, "\n", list); }
+
 		aux.clear();
+
 		return list;
 	}
 
-
-	private void tokenize(String el, String sp, List<String> list) {
+	/**
+	 * Tokenizing all the context of a concept by separators and putting its contents on a list
+	 */
+	private void contextTokenizer(String el, String sp, List<String> list) {
 
 		StringTokenizer st = new StringTokenizer(el, sp);
 		while (st.hasMoreTokens()) {
  		   	String token = st.nextToken();
 
- 		   	if (!list.contains(token)) {			
+ 		   	if (!list.contains(token)) {
  		   		list.add(token);
  		   	}
 		}
 	}
 
-
-	private List<String> removal(List<String> aux) {
+	/**
+	 * Removing the stop words of a tokenized context
+	 */
+	private List<String> contextRmStopWords(List<String> tokenizedContext) {
 		List<String> list = new ArrayList<>();
-		for (String word : aux) {
-			String str = null;
+
+		for (String word : tokenizedContext) {
+			String str;
 			str = removeSpecialChar(word);
-			tokenize(str, " ", list);
+			contextTokenizer(str, " ", list);
 		}
-		aux.clear();
+
+		tokenizedContext.clear();
 		return list;
 	}
 
 
+	/**
+	 * Removes some unwanted chars from parametrized string
+	 */
 	private String removeSpecialChar(String word) {
 		char x = '"';
 		String asp = String.valueOf(x);
@@ -122,7 +136,9 @@ public class ContextProcessing {
 		return word;
 	}
 
-
+	/**
+	 * Checks if a string represents a site
+	 */
 	private boolean isSite(String word) {
 		if(word.contains("http:")) {
 			return true;
@@ -130,75 +146,97 @@ public class ContextProcessing {
 		return false;
 	}
 
-
-	private List<String> separate(List<String> aux) {
+	/**
+	 * Splitting all context elements that contains # symbol
+	 */
+	private List<String> separateElementsByHashtag(List<String> cleanContext) {
 		List<String> list = new ArrayList<>();
-		for (String word : aux) {
-			String str = null;
+
+		for (String word : cleanContext) {
+
+			String str;
+
 			if(!isSite(word)) {
-				str = putCharSeq(word);
-				tokenize(str, "#", list);
-			} else {
+				str = putCharSequence(word);
+				contextTokenizer(str, "#", list);
+			}
+
+			else {
 				str = word;
-				tokenize(str, "#", list);
+				contextTokenizer(str, "#", list);
 			}
 
 		}
-		aux.clear();
+		cleanContext.clear();
 		return list;
 	}
 
-
-	private String putCharSeq(String word) {
+	/**
+	 * Ordering tokenizing context elements
+	 */
+	private String putCharSequence(String contextElement) {
 		String str = "";
 		int sIndex = 0;
-		for(int i=0; i < word.length(); i++) { //length -1
-			char ch = word.charAt(i);
+
+		for(int i = 0; i < contextElement.length(); i++) {
+			char ch = contextElement.charAt(i);
 			
-			if(Character.isUpperCase(ch) && i != word.length()-1) {
-				char next = word.charAt(i+1);
+			if(Character.isUpperCase(ch) && i != contextElement.length()-1) {
+				char next = contextElement.charAt(i+1);
 				
 				if(i!=0 && Character.isLowerCase(next)) {
-					char prev = word.charAt(i-1);
+					char prev = contextElement.charAt(i-1);
+
 					if(prev != '#') {
-						str = str + word.substring(sIndex, i) + "#";
+						str = str + contextElement.substring(sIndex, i) + "#";
 						sIndex = i;
 					}
 				}
-			} else if(!Character.isLetterOrDigit(ch)) {
-				word = word.replace("-", "#").replace("/", "#");
+			}
+
+			else if(!Character.isLetterOrDigit(ch)) {
+				contextElement = contextElement.replace("-", "#").replace("/", "#");
 			}
 		}
-		str = str + word.substring(sIndex);
+
+		str = str + contextElement.substring(sIndex);
 		return str;
 	}
 
-
-	private Set<String> lemma(List<String> aux) {
-		List<String> list = null;
-		Set<String> set = null;
-		list = stopWords(aux);
-		set = lemmatize(list);
+	/**
+	 * Cleaning set taking of the stop words and lemmatizing all of its contents
+	 */
+	private Set<String> cleanSet(List<String> aux) {
+		List<String> list;
+		Set<String> set;
+		list = addWithoutStopWords(aux);
+		set = lemmatizeList(list);
 		aux.clear();
 		return set;
 	}
 
-
-	private List<String> stopWords(List<String> aux) {
+	/**
+	 * Creating lists without stop words
+	 */
+	private List<String> addWithoutStopWords(List<String> aux) {
 		List<String> stpWords = this.base.getStpWords();
 		List<String> list = new ArrayList<>();
-		for(String word: aux) {            
+
+		for(String word: aux) {
 			String wordLow = word.toLowerCase();
-			if(!(stpWords.contains(wordLow))) {  
+
+			if(!(stpWords.contains(wordLow))) {
 				list.add(wordLow);
 			}  
 		}
 		return list;
 	}
 
-
-	private Set<String> lemmatize(List<String> aux) {
-		List<String> lemma = new ArrayList<String>();
+	/**
+	 * Lemmatizing strings of a list
+	 */
+	private Set<String> lemmatizeList(List<String> aux) {
+		List<String> lemma;
 		StanfordLemmatizer slem = this.base.getLemmatizer();
 		String toLemma = slem.toLemmatize(aux);
 		lemma = slem.lemmatize(toLemma);
@@ -206,8 +244,10 @@ public class ContextProcessing {
 		return slem.toSet(lemma);
 	}
 
-
-	private Set<String> number(Set<String> aux) {
+	/**
+	 * Creating sets with strings without numbers
+	 */
+	private Set<String> addWithoutNumbers(Set<String> aux) {
 		Set<String> set = new HashSet<>();
 		for(String word: aux) {
 			String str = removeNumbers(word);
@@ -219,7 +259,9 @@ public class ContextProcessing {
 		return set;
 	}
 
-
+	/**
+	 * Removes all numbers found in string
+	 */
 	private String removeNumbers(String word) {
 		word = word.replaceAll("[*0-9]", "");
 		return word;
@@ -227,18 +269,15 @@ public class ContextProcessing {
 
 
 	/**
-	 * This method process the context 
+	 * This method processes the context
 	 */
 	protected void process(List<Concept> listCon) {
 		ConceptManager man = new ConceptManager();
 		init_log();
 
 		for(Concept concept: listCon) {
-			//System.out.println("@@" + concept.getClassName());
-			//System.out.println("@@" + concept.getConceptContext());
-			//context will receive the processed context of a concept
+
 			Set<String> context = init(concept.getConceptContext());
-			//sets the context of a concept
 			man.configContext(concept, context);
 		}
 		final_log();
@@ -248,33 +287,32 @@ public class ContextProcessing {
 	/**
 	 * Split process
 	 */
+
 	private Set<String> init(Set<String> context) {
-		//Split strings, turning all elements of the context
-		//into tokens
-		Set<String> aux = spString(context);
-		Set<String> temp = new HashSet<String>();
-		//Split strings with upperCase.
-		//This second split, avoid tokens separated by upperCase
-		//that were in the description and were not separated. 
+		Set<String> aux = spString(context);		//Split strings, turning all elements of the context into tokens
+		Set<String> temp = new HashSet<String>();		//Split strings with upperCase avoiding tokens separated by
+													// upperCase that were in the description and were not separated
 		for(String word: aux) {
-			if(word.length() != 0) {	
+
+			if(word.length() != 0) {
+
 				if(hasUpperCase(word)) {
+
 					String tempStr = base.getLemmatizer().rmSpecialChar(word);
 					temp.addAll(spUpperCase(tempStr));
+
 				} else {
+
 					String tempStr = base.getLemmatizer().rmSpecialChar(word);
 					temp.add(tempStr.toLowerCase());
 				}
 			}
 		}
-		//Remove the stop words
-		//System.out.println("$$" + temp);
+
 		temp = base.getLemmatizer().rmStopWords(temp);
-		//Lemmatize the context
 		temp = lemmatizer(temp);
-		//System.out.println("--" + temp);
 		temp = base.getLemmatizer().rmStopWords(temp);
-		//System.out.println("---" + temp);
+
 		return temp;
 	}
 
@@ -282,6 +320,7 @@ public class ContextProcessing {
 	/**
 	 * Lemmatizes all elements of a set
 	 */
+
 	private Set<String> lemmatizer(Set<String> context) {
 		List<String> lemma = new ArrayList<String>();
 		StanfordLemmatizer slem = this.base.getLemmatizer();
@@ -294,6 +333,7 @@ public class ContextProcessing {
 	/**
 	 * Split strings separated with "_", " ", "�" and upperCase
 	 */
+
 	private Set<String> spString(Set<String> context) {
 		Set<String> temp= new HashSet<String>();
 
@@ -324,6 +364,7 @@ public class ContextProcessing {
 	/**
 	 * Splits strings separated by upperCase
 	 */
+
 	private Set<String> spUpperCase(String wordComp) {
 		Set<String> sep = new HashSet<String>();
 		int x = wordComp.length();
@@ -340,12 +381,15 @@ public class ContextProcessing {
 		return sep;
 	}
 
+
 //Auxiliary methods
 
 
 	/**
 	 * Verifies if a string is separated by space
 	 */
+
+
 	private boolean hasWhiteSpace(String str) {
 		int length = str.length();
 
@@ -361,6 +405,7 @@ public class ContextProcessing {
 	/**
 	 * Verifies if a string is separated by UpperCase
 	 */
+
 	private boolean hasUpperCase(String word) {
 		int x = word.length();
 		if(!hasConsecutiveUpperCase(word)) {
@@ -373,6 +418,9 @@ public class ContextProcessing {
 		return false;	
 	}
 
+	/**
+	 * Checks if a string contains consecutive upper cased chars
+	 */
 
 	private boolean hasConsecutiveUpperCase(String word) {
 		int cont = 0;

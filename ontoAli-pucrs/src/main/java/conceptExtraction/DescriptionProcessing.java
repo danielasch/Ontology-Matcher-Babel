@@ -87,7 +87,7 @@ public class DescriptionProcessing {
 //Auxiliary methods
 		
 		/**
-		 * Removes the stopwords of a set
+		 * Removes the stop words of a set
 		 */
 		private Set<String> rmStopWords(Set<String> set) {
 		    Set<String> wordSet = new HashSet<String>();
@@ -101,10 +101,12 @@ public class DescriptionProcessing {
 		        }  
 		    }
 			return wordSet;
-		}		
+		}
 
-
-		private String rmSpecialChar(String word) {
+	/**
+	 * Remove from a string some unwanted chars
+	 */
+	private String rmSpecialChar(String word) {
 			if(word.endsWith("-")) {
 				word = word.replace("-", "");
 			}
