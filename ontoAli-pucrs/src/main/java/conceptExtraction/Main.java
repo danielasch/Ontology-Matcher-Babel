@@ -234,13 +234,20 @@ public class Main {
 	 */
 	private static void match(Ontology dom, Ontology up, String outPath, List<Concept>listDom, List<Concept>listUp, String[]args){
 		int tec = getTec(args);
+
 		RdfGenerator gen = new RdfGenerator(outPath);
 		gen.generateHeader(dom, up);
-		Matching match = null;
-		if (tec == 1) match = new Matching();
-		else if (tec == 2)  match = new Matching(getModel(args));
-		gen.mapEverything(match.matchBabel(listDom, listUp, tec));
 
+		Matching match = null;
+
+		if (tec == 1) {
+			match = new Matching();
+		}
+		else if (tec == 2)  {
+			match = new Matching(getModel(args));
+		}
+
+		gen.mapEverything(match.matchBabel(listDom, listUp, tec));
 	}
 
 

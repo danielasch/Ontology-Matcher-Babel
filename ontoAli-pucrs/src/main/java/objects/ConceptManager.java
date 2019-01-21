@@ -14,8 +14,7 @@ import resources.Utilities;
  * This class is used to bring the object Concept to the local package
  */
 public class ConceptManager {
-
-//public methods
+    
 
     /**
      * These methods calls protected methods from the Concept class,

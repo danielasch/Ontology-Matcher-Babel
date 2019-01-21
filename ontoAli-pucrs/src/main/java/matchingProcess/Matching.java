@@ -73,12 +73,14 @@ public class Matching {
 
 	public List<Mapping> matchBabel(List<Concept>dom, List<Concept>up, int tec){
 		initLog();
+
 		Set<BabelNetResource.SearchObject> hyp = new HashSet<>();
 		List<BabelSynset> path = new LinkedList<>();
 		List<Mapping> listM = new ArrayList<>();
         BabelSynset selected = null;
 
 		for(Concept d : dom){
+
 			path.clear();
 
 			int levels = 0;
@@ -91,20 +93,37 @@ public class Matching {
                 matched = tryMatch(hypernym,up,d,listM,levels);
                 path.add(bs);
                 levels++;
-				while(levels != limit){
-                    if(matched) {
+
+                while(levels != limit){
+
+                	if(matched) {
                         d.getUtilities().setHypernyms(path.toString());
                         break;
                     }
-                    hyp = bn.getHypernyms(bs,hyp,path);
-                    if(!hyp.isEmpty()) {
-                        if (tec == 1) selected = disambLESK.leskTechnique(hyp, d).getSynset();
-                        else if (tec ==2) selected = disambWE.weTechnique(hyp, d, false).getSynset();
+
+                	hyp = bn.getHypernyms(bs,hyp,path);
+
+                	if(!hyp.isEmpty()) {
+
+                		if (tec == 1) {
+                			selected = disambLESK.leskTechnique(hyp, d).getSynset();
+                		}
+
+                		else if (tec ==2) {
+                			selected = disambWE.weTechnique(hyp, d, false).getSynset();
+                		}
+
 						hypernym = bn.lemmatizeHypernym(selected.toString());
 						matched = tryMatch(hypernym, up, d, listM, levels);
 						bs = selected;
 						levels++;
-					}else levels = limit;
+
+					}
+
+                	else {
+                		levels = limit;
+                	}
+
 					path.add(bs);
 				}
 			}
@@ -127,19 +146,28 @@ public class Matching {
 	private boolean tryMatch(String hypernym, List<Concept>up, Concept dom, List<Mapping> listM, int levels){
 		Boolean matched = false;
 		ConceptManager man = new ConceptManager();
+
 		for (Concept u : up) {
+
 			if (u.getClassName().toLowerCase().equals(hypernym)) {
+
 				Mapping map = new Mapping();
 				map.setSource(dom.get_owlClass().getIRI().toString());
+
 				man.configAliClass(dom, u.get_owlClass());
+
 				map.setTarget(dom.getAliClass().getIRI().toString());
 				map.setRelation("&lt;");
 				map.setMeasure("1.0");
+
 				listM.add(map);
+
 				Utilities ut = dom.getUtilities();
 				ut.setSelectedHypernym(hypernym);
 				ut.setLevel(levels);
+
 				matched = true;
+
 				break;
 			}
 		}

@@ -155,6 +155,10 @@ public class StanfordLemmatizer {
 
 		if(word.contains("`")) word = word.replace("`", "");
 
+		if(word.contains("&")) word = word.replace("&", "");
+
+		if(word.contains("%")) word = word.replace("%", "");
+
 		if(word.contains(("\""))) word = word.replaceAll("\"", "");
 
 		return word;
@@ -168,30 +172,47 @@ public class StanfordLemmatizer {
 	public String spConceptName(String conceptName) {
 		String name = null;
 		String cnpName = conceptName;
+
 		if(cnpName.contains("_")) {
+
 			String words[];
 			words = cnpName.split("_");
 			int i = words.length;
 			name = words[i - 1];
-		} else if(cnpName.contains("-")) {
+		}
+
+		else if(cnpName.contains("-")) {
+
 			String words[];
 			words = cnpName.split("-");
 			int i = words.length;
 			name = words[i - 1];
-		} else if(hasUpperCase(cnpName)) {
+		}
+
+		else if(hasUpperCase(cnpName)) {
+
 			int x = cnpName.length();
 			int up = 0;
+
 			for(int y = 1; y < x; y++) {
+
 				if(Character.isUpperCase(cnpName.charAt(y)) && y > up) {
+
 					up = y;
 				}
 			}
+
 			if(up != 0) {
+
 				name = cnpName.substring(up);
 			}
-		} else {
+		}
+
+		else {
+
 			name = cnpName;
 		}
+
 		return name.toLowerCase();
 	}
 

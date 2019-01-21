@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 
-import objects.Ontology;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
@@ -12,6 +11,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 
 import objects.Concept;
 import objects.ConceptManager;
+import resources.BaseResource;
 
 /**
  * This class extract the information about a concept from the ontology
@@ -48,6 +48,9 @@ public class ContextExtraction {
     }
 
 //Methods
+
+
+    //Extraction methods
 
     /**
      * Extracts the concept and its information from domain ontology
@@ -103,20 +106,20 @@ public class ContextExtraction {
     protected List<Concept> extractWithContext(OWLOntology onto) {
         initLog();
 
-        List<Concept> listCon = new ArrayList<Concept>();
+        List<Concept> listCon = new ArrayList<>();
         ConceptManager man = new ConceptManager();
-        Set<String> ontology_context = new HashSet<>();
+        Set<String> ontologyContext = new HashSet<>();
 
         for (OWLClass owlClass : onto.getClassesInSignature()) {
 
             if (!owlClass.isTopEntity()) {
 
-                ontology_context.add(owlClass.getIRI().getFragment());
+                ontologyContext.add(owlClass.getIRI().getFragment());
 
                 Concept concept = new Concept();
-                Set<String> context = new HashSet<String>();
-                List<OWLClassExpression> listSup = new ArrayList<OWLClassExpression>();
-                List<OWLClassExpression> listSub = new ArrayList<OWLClassExpression>();
+                Set<String> context = new HashSet<>();
+                List<OWLClassExpression> listSup = new ArrayList<>();
+                List<OWLClassExpression> listSub = new ArrayList<>();
 
                 extractSuperClass(onto, owlClass, null, listSup);
 
@@ -141,7 +144,7 @@ public class ContextExtraction {
             }
         }
         for (Concept c : listCon) {
-            c.getConceptContext().addAll(ontology_context);
+            c.getConceptContext().addAll(ontologyContext);
         }
         finalLog();
         return listCon;
@@ -154,7 +157,7 @@ public class ContextExtraction {
     protected List<Concept> extractUpper(OWLOntology onto) {
         initLogUpper();
 
-        List<Concept> listCon = new ArrayList<Concept>();
+        List<Concept> listCon = new ArrayList<>();
         ConceptManager man = new ConceptManager();
 
         for (OWLClass owlClass : onto.getClassesInSignature()) {
@@ -174,6 +177,9 @@ public class ContextExtraction {
         finalLogUpper();
         return listCon;
     }
+
+
+    //Extraction auxiliary methods
 
     /**
      * Manage concept class attributes
@@ -223,11 +229,14 @@ public class ContextExtraction {
 
             //Condition that avoid the apparition of null and repeated elements into the concept description
             if (desc == null && backup != null) {
+
                 desc = backup;
-            } else if ((desc != null && backup != null) && !desc.contains(backup)) {
-                desc = desc + backup;
             }
 
+            else if ((desc != null && backup != null) && !desc.contains(backup)) {
+
+                desc = desc + backup;
+            }
         }
         return desc;
     }
@@ -299,6 +308,33 @@ public class ContextExtraction {
 
 //Auxiliary methods 
 
+
+    //Verification methods
+
+    /**
+     * Verifies if the list contains owl:Thing
+     */
+    private boolean verifyThing(List<OWLClassExpression> list) {
+        if (list.get(0).asOWLClass().isTopEntity()) {
+            return true;
+        }
+        return false;
+    }
+
+
+    /**
+     * Checks if a string is representing a site
+     */
+    private boolean isSite(String word) {
+        if (word.contains("http:")) {
+            return true;
+        }
+        return false;
+    }
+
+
+    //Removal methods
+
     /**
      * Removes the suffix of the annotation
      */
@@ -313,23 +349,11 @@ public class ContextExtraction {
         return aux;
     }
 
-
-    /**
-     * Verifies if the list contains owl:Thing
-     */
-    private boolean verifyThing(List<OWLClassExpression> list) {
-        if (list.get(0).asOWLClass().isTopEntity()) {
-            return true;
-        }
-        return false;
-    }
-
-
     /**
      * Removes some chars of a string
      */
     private String removeSpecialChar(String word) {
-
+        BaseResource baseRes = new BaseResource();
         if (!isSite(word)) {
             String aux = word;
             char x = '"';
@@ -343,42 +367,11 @@ public class ContextExtraction {
                 aux = aux.replace(z, "");
             }
 
-            if (aux.contains(".")) {
-                aux = aux.replace(".", " ");
-            }
+            baseRes.getLemmatizer().rmSpecialChar(aux);
 
-            if (aux.contains(",")) {
-                aux = aux.replace(",", "");
-            }
-
-            if (aux.contains("?")) {
-                aux = aux.replace("?", " ");
-            }
-
-            if (aux.contains(":")) {
-                aux = aux.replace(":", " ");
-            }
-
-            if (aux.contains("!")) {
-                aux = aux.replace("!", " ");
-            }
-
-            if (aux.contains("  ")) {
-                aux = aux.replaceAll("  ", " ");
-            }
             return aux;
         }
         return word;
     }
 
-
-    /**
-     * Checks if a string is representing a site
-     */
-    private boolean isSite(String word) {
-        if (word.contains("http:")) {
-            return true;
-        }
-        return false;
-    }
 }

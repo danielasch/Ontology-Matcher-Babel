@@ -29,7 +29,7 @@ public class OutFiles {
 	 */
 
 	public OutFiles(String path) {
-		String aux = path.replace(".rdf", "_1.txt");
+		String aux = path.replace(".rdf", "_info.txt");
 		this.outPath = aux;
 	}
 
@@ -42,6 +42,7 @@ public class OutFiles {
 
 	public void outFile(List<Concept> listDomain, int tec) {
 		try {
+
 			FileWriter arq = new FileWriter(this.outPath);
 			PrintWriter printer = new PrintWriter(arq);
 			Set<String> bgwSelect;
@@ -70,13 +71,16 @@ public class OutFiles {
 				printer.print("Synset selecionado BabelNet: ");
 
 				if(cnp.getGoodSynset() != null) {
+
 					printer.print(cnp.getGoodSynset().getSynset().getMainSense() + "\n");
 
 					if (cnp.getUtilities().getSelectedHypernym() != null) {
 						printer.print("Hiperonímio selecionado: " + ut.getSelectedHypernym() +
 								" no nível de busca " + ut.getLevel() + "\n");
 						printer.print("Caminho realizado: " + ut.getHypernyms() + "\n");
-					} else {
+					}
+
+					else {
 						printer.print("Hiperonímio selecionado: Não foi encontrado nenhum hiperonímio na ontologia de topo!\n");
 						printer.print("Caminho realizado: Nenhum caminho encontrado!\n");
 					}
@@ -86,6 +90,7 @@ public class OutFiles {
 					Set<BabelNetResource.SearchObject> synsets = ut.getDisambiguatedSynsets();
 
 					int count = 1;
+
 					for (BabelNetResource.SearchObject so : synsets) {
 						printer.print("\n" + count + ")\n");
 						printer.print(">Synset: " + so.getSynset() + "\n");
@@ -99,6 +104,7 @@ public class OutFiles {
 					printer.print("\n>Technique Info.<\n");
 
 					if (tec == 1) {
+
 						printer.print("\tLESK TECHNIQUE\n");
 						bgwSelect = cnp.getGoodSynset().getBgw();
 						printer.print("Intersecção de palavras encontrada - LESK:");
@@ -109,8 +115,12 @@ public class OutFiles {
 								printer.print(" " + element + " ");
 							}
 						}
-					} else if (tec == 2) {
+					}
+
+					else if (tec == 2) {
+
 						printer.print("\tWORD EMBEDDING TECHNIQUE\n");
+
 						int index = 1;
 
 						for (SynsetDisambiguationWE.WordEmbeddingObject weObj : ut.getMappings()) {

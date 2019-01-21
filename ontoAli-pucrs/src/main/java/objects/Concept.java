@@ -34,7 +34,7 @@ public class Concept {
 //Constructor
 	
 	public Concept() {
-		this.conceptContext = new HashSet<String>();
+		this.conceptContext = new HashSet<>();
 		this.goodSynset = null;
 		this.ut = null;
 	}
@@ -50,7 +50,7 @@ public class Concept {
 		return owlClass;
 	}
 
-	String getOntologyID() {
+	public String getOntologyID() {
 		return ontologyID;
 	}
 
@@ -103,19 +103,19 @@ public class Concept {
 
     protected void setOwlClass(OWLClass owlclass) { owlClass = owlclass; }
 
-    void setOntologyID(String _ontologyID) {
+    protected void setOntologyID(String _ontologyID) {
         ontologyID = _ontologyID;
     }
 
-    void setClassID(String _classID) {
+	protected void setClassID(String _classID) {
         classID = _classID;
     }
 
-    void setOntologyName(String _ontologyName) {
+	protected void setOntologyName(String _ontologyName) {
         ontologyName = _ontologyName;
     }
 
-    void setClassName(String _className) {
+	protected void setClassName(String _className) {
         className = _className;
     }
 
@@ -139,9 +139,9 @@ public class Concept {
 		subs = _subs;
 	}
 
-	void setGoodSynset(BabelNetResource.SearchObject _goodSynset) { goodSynset = _goodSynset; }
+	protected void setGoodSynset(BabelNetResource.SearchObject _goodSynset) { goodSynset = _goodSynset; }
 
-	void setAliClass(OWLClass _aliclass) {
+	protected void setAliClass(OWLClass _aliclass) {
 		aliClass = _aliclass;
 	}
 
