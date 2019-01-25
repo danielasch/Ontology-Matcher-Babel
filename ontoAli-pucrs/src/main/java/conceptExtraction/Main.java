@@ -324,14 +324,14 @@ public class Main {
 	private static void verify(String[] args) {
 		
 		if(args[0].contains("\\")) {
-			//args[0] = args[0].replaceAll("\\", "/");
+			args[0] = args[0].replaceAll("\\\\", "/");
 		}
 		if(!args[0].endsWith(".owl")) {
 			args[0] = args[0].concat(".owl");
 		}
 		
 		if(args[1].contains("\\")) {
-			//args[1] = args[1].replaceAll("\\", "/");
+			args[1] = args[1].replaceAll("\\\\", "/");
 		}
 		
 		if(!args[1].endsWith("/")) {
