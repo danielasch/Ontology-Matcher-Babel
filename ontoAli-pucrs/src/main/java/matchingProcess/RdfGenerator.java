@@ -58,23 +58,27 @@ public class RdfGenerator {
     public void generateHeader(Ontology onto1, Ontology onto2) {
 
             printWriter.print("<?xml version='1.0' encoding='utf-8' standalone='no'?>\n" +
-                        "<rdf:RDF xmlns='http://knowledgeweb.semanticweb.org/heterogeneity/alignment#'\n" +
-                        "\t\t xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'\n" +
-                        "\t\t xmlns:xsd='http://www.w3.org/2001/XMLSchema#'\n" +
-                        "\t\t xmlns:align='http://knowledgeweb.semanticweb.org/heterogeneity/alignment#'>\n");
+                        "\t<rdf:RDF xmlns='http://knowledgeweb.semanticweb.org/heterogeneity/alignment#'\n" +
+                        "\t\t\txmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'\n" +
+                        "\t\t\txmlns:xsd='http://www.w3.org/2001/XMLSchema#'\n" +
+                        "\t\t\txmlns:align='http://knowledgeweb.semanticweb.org/heterogeneity/alignment#'>\n\n");
 
-            printWriter.print("<Alignment>\n" +
-                        "\t<xml>yes</xml>\n" +
-                        "\t<level>0</level>\n" +
-                        "\t<type>11</type>\n");
+            printWriter.print("\t\t<Alignment>\n" +
+                        "\t\t\t<xml>yes</xml>\n" +
+                        "\t\t\t<level>0</level>\n" +
+                        "\t\t\t<type>11</type>\n\n");
 
-            printWriter.print("\t<onto1>\n" + "\t\t<Ontology rdf:about=" + '"' + onto2.getOntologyID().getOntologyIRI().toString() + '"' + ">\n" +
-                        "\t\t\t<location>file:" + onto2.getFileName() + "</location>\n" +
-                        "\t\t</Ontology>\n" + "\t</onto1>\n");
+            printWriter.print("\t\t\t<onto1>\n" +
+                    "\t\t\t\t<Ontology rdf:about=" + '"' + onto2.getOntologyID().getOntologyIRI().toString() + '"' + ">\n" +
+                    "\t\t\t\t\t<location>file:" + onto2.getFileName() + "</location>\n" +
+                    "\t\t\t\t</Ontology>\n" +
+                    "\t\t\t</onto1>\n\n");
 
-            printWriter.print("\t<onto2>\n" + "\t\t<Ontology rdf:about=" + '"' + onto1.getOntologyID().getOntologyIRI().toString() + '"' + ">\n" +
-                        "\t\t\t<location>file:" + onto1.getFileName() + "</location>\n" +
-                        "\t\t</Ontology>\n" + "\t</onto2>\n");
+            printWriter.print("\t\t\t<onto2>\n" +
+                    "\t\t\t\t<Ontology rdf:about=" + '"' + onto1.getOntologyID().getOntologyIRI().toString() + '"' + ">\n" +
+                    "\t\t\t\t\t<location>file:" + onto1.getFileName() + "</location>\n" +
+                    "\t\t\t\t</Ontology>\n" +
+                    "\t\t\t</onto2>\n\n");
 
     }
 
@@ -87,13 +91,14 @@ public class RdfGenerator {
      */
 
     private String generateMapping(Mapping ontologyMapping){
-        String out = "\t<map>\n" +
-                "\t\t<Cell>\n" +
-                "\t\t\t<entity1 rdf:resource='"+ ontologyMapping.getTarget() +"'/>\n" +
-                "\t\t\t<entity2 rdf:resource='"+ ontologyMapping.getSource() +"'/>\n" +
-                "\t\t\t<relation>" + ontologyMapping.getRelation() + "</relation>\n" +
-                "\t\t\t<measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>"+ ontologyMapping.getMeasure() +"</measure>\n" +
-                "\t\t</Cell>\n" + "\t</map>\n";
+        String out = "\t\t\t<map>\n" +
+                "\t\t\t\t<Cell>\n" +
+                "\t\t\t\t\t<entity1 rdf:resource='"+ ontologyMapping.getTarget() +"'/>\n" +
+                "\t\t\t\t\t<entity2 rdf:resource='"+ ontologyMapping.getSource() +"'/>\n" +
+                "\t\t\t\t\t<relation>" + ontologyMapping.getRelation() + "</relation>\n" +
+                "\t\t\t\t\t<measure rdf:datatype='http://www.w3.org/2001/XMLSchema#float'>"+ ontologyMapping.getMeasure() +"</measure>\n" +
+                "\t\t\t\t</Cell>\n" +
+                "\t\t\t</map>\n";
         return out;
     }
 

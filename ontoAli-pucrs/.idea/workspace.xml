@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4ddb91f1-af43-4b9d-9a96-4f037d15d922" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/babelnet.var.properties" beforeDir="false" afterPath="$PROJECT_DIR$/config/babelnet.var.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/conceptExtraction/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/conceptExtraction/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/matchingProcess/RdfGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/matchingProcess/RdfGenerator.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -33,10 +31,31 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/matchingProcess/RdfGenerator.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-38">
+              <caret line="98" column="27" selection-start-line="98" selection-start-column="27" selection-end-line="98" selection-end-column="27" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/resources/OutFiles.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="570">
+              <caret line="45" column="58" selection-start-line="45" selection-start-column="58" selection-end-line="45" selection-end-column="58" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/conceptExtraction/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="56">
-              <caret line="77" column="48" selection-start-line="77" selection-start-column="48" selection-end-line="77" selection-end-column="48" />
+            <state relative-caret-position="2445">
+              <caret line="182" column="72" selection-start-line="182" selection-start-column="72" selection-end-line="182" selection-end-column="72" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -63,7 +82,6 @@
         <option value="$PROJECT_DIR$/src/main/java/resources/Word2Vector.java" />
         <option value="$PROJECT_DIR$/src/main/java/resources/BabelNetResource.java" />
         <option value="$PROJECT_DIR$/src/main/java/synsetSelection/SynsetDisambiguation.java" />
-        <option value="$PROJECT_DIR$/src/main/java/matchingProcess/RdfGenerator.java" />
         <option value="$PROJECT_DIR$/src/main/java/synsetSelection/SynsetDisambiguationLESK.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/synsetSelection/SynsetDisambiguationWE.java" />
@@ -80,6 +98,7 @@
         <option value="$PROJECT_DIR$/src/main/java/matchingProcess/Matching.java" />
         <option value="$PROJECT_DIR$/src/main/java/resources/OutFiles.java" />
         <option value="$PROJECT_DIR$/src/main/java/conceptExtraction/Main.java" />
+        <option value="$PROJECT_DIR$/src/main/java/matchingProcess/RdfGenerator.java" />
       </list>
     </option>
   </component>
@@ -111,7 +130,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -182,6 +200,7 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -253,7 +272,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="155327000" />
+    <option name="totallyTimeSpent" value="156122000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -266,8 +285,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1299" height="743" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49837133" visible="true" weight="0.24022347" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49837133" visible="true" weight="0.2601756" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -276,7 +296,7 @@
       <window_info id="Favorites" order="6" sideWeight="0.50162864" side_tool="true" weight="0.26097366" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32899022" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.6612378" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.07491857" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.732899" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -417,8 +437,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/resources/OutFiles.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="45" column="58" lean-forward="true" selection-start-line="45" selection-start-column="58" selection-end-line="45" selection-end-column="58" />
+        <state relative-caret-position="570">
+          <caret line="45" column="58" selection-start-line="45" selection-start-column="58" selection-end-line="45" selection-end-column="58" />
         </state>
       </provider>
     </entry>
@@ -499,16 +519,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/matchingProcess/RdfGenerator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="27" column="20" selection-start-line="27" selection-start-column="20" selection-end-line="27" selection-end-column="20" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/matchingProcess/Matching.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="557">
@@ -525,10 +535,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/conceptExtraction/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="56">
-          <caret line="77" column="48" selection-start-line="77" selection-start-column="48" selection-end-line="77" selection-end-column="48" />
+        <state relative-caret-position="2445">
+          <caret line="182" column="72" selection-start-line="182" selection-start-column="72" selection-end-line="182" selection-end-column="72" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/matchingProcess/RdfGenerator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-38">
+          <caret line="98" column="27" selection-start-line="98" selection-start-column="27" selection-end-line="98" selection-end-column="27" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
